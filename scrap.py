@@ -26,10 +26,26 @@ def get_url(URL, link):
     return full_link
 
 ul = soup.find("ul", {"id": "episode_related"})
+
+ep_download_links = []
+
 for li in ul.children:
     link = li.find("a")["href"]
     url = get_url(URL, link)
-    print(url)
-    get_soup(url)
-    break
+    soup_ep = get_soup(url)
+    title = soup_ep.find("div", {"class", "anime_video_body"}).find("h1").text
+    print(title)
+    
+    link_li = soup_ep.find("li", {"class", "dowloads"})
+    link = link_li.find("a")["href"]
 
+    ep_download_links.append((title, link))
+
+file = open("download_links.txt", "w")
+
+for title, link in ep_download_links:
+    row = f"{title}, {link}"
+    print(row)
+    file.write(row)
+
+file.close()
