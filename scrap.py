@@ -44,8 +44,9 @@ for li in ul.children:
 file = open("download_links.txt", "w")
 
 for title, link in ep_download_links:
-    row = f"{title}, {link}"
-    print(row)
+    row = f"{title}, {link}\n"
+    # print(row)
     file.write(row)
 
 file.close()
+
