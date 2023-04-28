@@ -2,30 +2,7 @@ var links_container = document.getElementById("links_container")
 var download_frame = document.getElementById("download_frame")
 var title = document.getElementById("title")
 var all_links;
-var ep = getCookie("ep")
-
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = "expires="+d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;" + "SameSite=None";
-}
-
-
-function getCookie(cname) {
-  let name = cname + "=";
-  let ca = document.cookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
+var ep = localStorage.getItem("ep")
 
 
 fetch('/get', {
@@ -66,7 +43,7 @@ function isNumber(str) {
 function setEP(num) {
   if (isNumber(num) || Number.isInteger(num)) {
     ep = parseInt(num)
-    setCookie("ep", ep, 100)
+    localStorage.setItem("ep", ep)
     console.log(ep)
 
     let episode_index = all_links.length - ep
