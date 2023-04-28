@@ -30,8 +30,8 @@ def get():
 @app.route("/get")
 def get():
     matrix = get_links()
-    return str(matrix)
+    return str(matrix).replace("'", '"')
 
 
-app.run(port=8080, debug=True)
+app.run(host="0.0.0.0", port=8080, debug=True)
 

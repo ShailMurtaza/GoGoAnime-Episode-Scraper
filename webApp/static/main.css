@@ -25,16 +25,24 @@ main {
 }
 
 
-#ep_container {
+#links_container {
+  text-align: center;
   margin-top: 10px;
   padding: 30px;
   border: 3px solid orange;
 }
+#download_frame {
+  width: 100%;
+  border: 1px solid grey;
+  border-radius: 1px;
+}
 
 .btn-ep {
   font-size: large;
+  text-align: center;
   padding: 10px;
   margin-right: 10px;
+  margin-top: 10px;
   min-width: 100px;
   color: white;
   background-color: orange;
