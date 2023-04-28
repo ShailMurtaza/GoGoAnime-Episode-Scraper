@@ -4,7 +4,6 @@ var title = document.getElementById("title")
 var all_links;
 var ep = localStorage.getItem("ep")
 
-
 fetch('/get', {
     method: 'GET',
     headers: {
