@@ -4,10 +4,10 @@ from requests import get
 
 def get_soup(url):
     print(f"URL: {url}")
-    #r = get(url)
-    #content = r.content
-    #open("test.html", "wb").write(content)
-    content = open("test.html").read()
+    r = get(url)
+    content = r.content
+    open("test.html", "wb").write(content)
+    # content = open("test.html").read()
     soup = bs(content, "html.parser")
     return soup
 
@@ -32,10 +32,11 @@ def get_req_url():
 
 
 def get_ep_list(url):
-    print(url)
     r = get(url)
-    print(r.content)
+    return r.content
 
 req_url = get_req_url()
-get_ep_list(req_url)
+ep_list = get_ep_list(req_url)
+
+print(ep_list)
 
