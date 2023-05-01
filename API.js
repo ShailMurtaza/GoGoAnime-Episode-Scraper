@@ -24,6 +24,8 @@ function loadListEpisode(obj, ep_start, ep_end, id, default_ep, alias) {
     });
 }
 
+var base_url_cdn_api = 'https://ajax.gogo-load.com/';
+
 if (document.getElementById('episode_page')) {
     var ep_start = $('#episode_page a.active').attr('ep_start');
     var ep_end = $('#episode_page a.active').attr('ep_end');
