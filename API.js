@@ -26,6 +26,8 @@ function loadListEpisode(obj, ep_start, ep_end, id, default_ep, alias) {
 
 var base_url_cdn_api = 'https://ajax.gogo-load.com/';
 
+// https://ajax.gogo-load.com/ajax/load-list-episode?ep_start=0&ep_end=74&id=6311&default_ep=0&alias=monster-dub
+
 if (document.getElementById('episode_page')) {
     var ep_start = $('#episode_page a.active').attr('ep_start');
     var ep_end = $('#episode_page a.active').attr('ep_end');

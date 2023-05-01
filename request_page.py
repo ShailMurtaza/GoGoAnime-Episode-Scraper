@@ -3,7 +3,7 @@ session = HTMLSession()
 URL = "https://www3.gogoanimes.fi/category/monster-dub"
 
 # URL of main page
-#URL = open("link.txt").read().split("\n")[0]
+URL = open("link.txt").read().split("\n")[0]
 print(f"URL: {URL}...")
 
 r = session.get(URL)
