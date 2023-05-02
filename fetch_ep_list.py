@@ -1,42 +1,53 @@
 from bs4 import BeautifulSoup as bs
 from requests import get
 
+class Fetch_EP:
+    def __init__(self):
+        self.url = self.get_main_url()
 
-def get_soup(url):
-    print(f"URL: {url}")
-    r = get(url)
-    content = r.content
-    open("test.html", "wb").write(content)
-    # content = open("test.html").read()
-    soup = bs(content, "html.parser")
-    return soup
+    # Get soup using URL
+    # It will first GET URL and then return soup
+    def get_soup(self, url):
+        r = get(url)
+        content = r.content
+        # open("test.html", "wb").write(content)
+        # content = open("test.html").read()
+        soup = bs(content, "html.parser")
+        return soup
 
+    def get_req_url(self):
+        soup = self.get_soup(self.url)
+        print("DONE FETCHING MAIN URL ...")
 
-def get_req_url():
-    URL = open("link.txt").read().split("\n")[0]
-    soup = get_soup(URL)
+        # URL of api
+        api_url = "https://ajax.gogo-load.com/ajax/load-list-episode"
 
-    # URL of api
-    api_url = "https://ajax.gogo-load.com/ajax/load-list-episode"
+        ep_page_a = soup.find("ul", {"id": "episode_page"}).find("a")
+        ep_start = ep_page_a["ep_start"]
+        ep_end = ep_page_a["ep_end"]
 
-    ep_page_a = soup.find("ul", {"id": "episode_page"}).find("a")
-    ep_start = ep_page_a["ep_start"]
-    ep_end = ep_page_a["ep_end"]
+        anime_id = soup.find("input", {"id": "movie_id"})["value"]
+        default_ep = soup.find("input", {"id": "default_ep"})["value"]
+        alias = soup.find("input", {"id": "alias_anime"})["value"]
 
-    anime_id = soup.find("input", {"id": "movie_id"})["value"]
-    default_ep = soup.find("input", {"id": "default_ep"})["value"]
-    alias = soup.find("input", {"id": "alias_anime"})["value"]
+        req_url = f"{api_url}&ep_start={ep_start}&ep_end={ep_end}&id={anime_id}&default_ep={default_ep}&alias={alias}"
+        return req_url
 
-    req_url = f"{api_url}&ep_start={ep_start}&ep_end={ep_end}&id={anime_id}&default_ep={default_ep}&alias={alias}"
-    return req_url
+    def get_main_url(self):
+        file = open("link.txt")
+        data = file.read()
+        url = data.split("\n")[0]
+        return url
 
+    def get_ep_list(self):
+        URL = self.get_req_url()
+        print(f"API: {URL}")
+        soup = self.get_soup(URL)
+        print("DONE FETCHING API")
+        a_links = soup.find_all("a")
+        links = []
+        for a in a_links:
+            links.append(a["href"])
+        return links
 
-def get_ep_list(url):
-    r = get(url)
-    return r.content
-
-req_url = get_req_url()
-ep_list = get_ep_list(req_url)
-
-print(ep_list)
 
