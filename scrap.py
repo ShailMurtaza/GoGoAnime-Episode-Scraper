@@ -1,22 +1,23 @@
 from fetch_ep_list import Fetch_EP
 
-# URL of main page
-URL = open("link.txt").read().split("\n")[0]
-print(f"URL: {URL}")
+fetch = Fetch_EP()
 
+# URL of main page
+URL = fetch.url
+print(f"MAIN URL: {URL}")
+
+links = fetch.get_ep_list()
 # Take URL and end link and then join them
 def get_url(URL, link):
     URL = URL.split("/")[2]
     link = link.strip()
     full_link = "https://" + URL + link
+    print(full_link)
     return full_link
 
 
 # List in which all title an links will be stored
 ep_download_links = []
-
-fetch = Fetch_EP()
-links = fetch.get_ep_list()
 
 #Iterate over every link
 for link in links:

@@ -9,6 +9,8 @@ class Fetch_EP:
     # It will first GET URL and then return soup
     def get_soup(self, url):
         r = get(url)
+        if r.status_code == 404:
+            self.error(f"URL: {url}\n404 Not Found ...")
         content = r.content
         # open("test.html", "wb").write(content)
         # content = open("test.html").read()
@@ -22,7 +24,12 @@ class Fetch_EP:
         # URL of api
         api_url = "https://ajax.gogo-load.com/ajax/load-list-episode"
 
-        ep_page_a = soup.find("ul", {"id": "episode_page"}).find("a")
+        ep_page_ul = soup.find("ul", {"id": "episode_page"})
+        if not ep_page_ul:
+            self.error("episode_page not found in given URL")
+
+        ep_page_a = ep_page_ul.find("a")
+
         ep_start = ep_page_a["ep_start"]
         ep_end = ep_page_a["ep_end"]
 
@@ -49,5 +56,10 @@ class Fetch_EP:
         for a in a_links:
             links.append(a["href"])
         return links
+       
+    def error(self, msg):
+        print(msg)
+        input("Press ENTER to exit ...")
+        exit()
 
 
