@@ -28,10 +28,12 @@ class Fetch_EP:
         if not ep_page_ul:
             self.error("episode_page not found in given URL")
 
-        ep_page_a = ep_page_ul.find("a")
+        ep_page_a = ep_page_ul.find_all("a")
 
-        ep_start = ep_page_a["ep_start"]
-        ep_end = ep_page_a["ep_end"]
+        ep_start = ep_page_a[0]["ep_start"]
+        ep_end = ep_page_a[-1]["ep_end"]
+        print(f"\nEP START : {ep_start}")
+        print(f"EP END   : {ep_end}\n")
 
         anime_id = soup.find("input", {"id": "movie_id"})["value"]
         default_ep = soup.find("input", {"id": "default_ep"})["value"]
@@ -50,7 +52,7 @@ class Fetch_EP:
         URL = self.get_req_url()
         print(f"API: {URL}")
         soup = self.get_soup(URL)
-        print("DONE FETCHING API")
+        print("DONE FETCHING API\n")
         a_links = soup.find_all("a")
         links = []
         for a in a_links:

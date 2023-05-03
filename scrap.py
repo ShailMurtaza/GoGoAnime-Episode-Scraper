@@ -12,7 +12,7 @@ def get_url(URL, link):
     URL = URL.split("/")[2]
     link = link.strip()
     full_link = "https://" + URL + link
-    print(full_link)
+    # print(full_link)
     return full_link
 
 
