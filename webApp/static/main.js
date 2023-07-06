@@ -3,7 +3,6 @@ var download_frame = document.getElementById("download_frame")
 var title = document.getElementById("title")
 var all_links;
 var ep = localStorage.getItem("ep")
-var ep_index = -1;
 
 fetch('/get', {
     method: 'GET',
@@ -16,18 +15,17 @@ fetch('/get', {
       init(response)
    })
 
-function create_link(title, link) {
+function create_link(title, link, ep_index) {
   const btn = document.createElement("button")
-  let ep = title.split(" ")[ep_index]
-  btn.innerText = `EP | ${ep}`
+  btn.innerText = `EP | ${ep_index}`
   btn.className = "btn-ep"
-  btn.onclick = ()=> {setEP(ep)}
+  btn.onclick = ()=> {setEP(ep_index)}
   links_container.appendChild(btn)
 }
 
 function show_links(data) {
   for (let i=0;i<data.length;i++) {
-    create_link(data[i][0], data[i][1])
+    create_link(data[i][0], data[i][1], data.length-i)
   }
 }
 
@@ -59,17 +57,7 @@ function init(response) {
   else {
     setEP(1)
   }
-  let first_title = all_links[0][0].split(" ")
-  // Find index of episode number by iterating over first episode title
-  for (let i = 0; i < first_title.length; i++) {
-    if (isNumber(first_title[i])) {
-      ep_index = i // set index to global variable ep_index
-      show_links(all_links) // create all links at bottom of web page
-      break
-    }
-  }
-  if (ep_index === -1)
-    console.error("Unable to find Episode INDEX")
+  show_links(all_links) // create all links at bottom of web page
 }
 
 function next_ep() {
