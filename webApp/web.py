@@ -36,7 +36,6 @@ def fetch(url):
     # if r.status_code == 404:
         # return abort(404)
     # return r.content
-    sleep(3)
     return open("test.html", "r").read()
 
 
