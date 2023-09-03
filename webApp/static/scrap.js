@@ -5,25 +5,26 @@ const api_url = "https://ajax.gogo-load.com/ajax/load-list-episode" // API of Go
 
 
 async function scrap() {
+    scrap_btn.disabled = true
     let anime_url = url_inp.value
     if (anime_url) {
         anime_url = btoa(anime_url)
         output("FETCHING ...")
         let html = await fetch_data("/fetch/" + anime_url)
-        console.log(html)
+        let api_url = get_req_url(html)
+        console.log(api_url)
     }
     else {
         console.error("Enter URL")
+        scrap_btn.disabled = false
     }
 }
 
 
-function get_req_url() {
+function get_req_url(data) {
+    return null
 }
 
-function output(text) {
-    output_cont.innerHTML += text = "\n"
-}
 
 async function fetch_data(url) {
     try {
@@ -38,4 +39,9 @@ async function fetch_data(url) {
         console.error("Error:", error);
         throw error; // Rethrow the error for the caller to handle
     }
+}
+
+
+function output(text) {
+    output_cont.innerHTML += text = "\n"
 }
