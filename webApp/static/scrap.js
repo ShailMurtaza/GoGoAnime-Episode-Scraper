@@ -6,21 +6,21 @@ const parser = new DOMParser();
 
 
 async function scrap() {
+    let anime_url = url_inp.value.trim() // get url from input box
+    if (!anime_url) { // if url_inp is empty
+        output("Enter URL")
+        return
+    }
     scrap_btn.disabled = true // disable scrap button
-    let anime_url = url_inp.value // get url from input box
-    if (anime_url) { // if input box is not empty
-        anime_url = btoa(anime_url) // encode url to base 64
-        output("FETCHING ...")
-        let html = await fetch_data("/fetch/" + anime_url) // get HTML data of url using fetch api of server
-        output("FETCHED ...")
-        anime_url = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
-        output("URL has been generated ...")
-        console.log(anime_url)
-    }
-    else {
-        console.error("Enter URL")
-        scrap_btn.disabled = false
-    }
+    // if input box is not empty
+    anime_url = btoa(anime_url) // encode url to base 64
+    output("FETCHING ...")
+    let html = await fetch_data("/fetch/" + anime_url) // get HTML data of url using fetch api of server
+    output("FETCHED ...")
+    anime_url = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
+    output("URL has been generated ...")
+    console.log(anime_url)
+
 }
 
 
@@ -58,5 +58,5 @@ async function fetch_data(url) {
 
 
 function output(text) {
-    output_cont.innerHTML += text = "\n"
+    output_cont.innerHTML += text + "</br>"
 }
