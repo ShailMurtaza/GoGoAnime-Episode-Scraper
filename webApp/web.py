@@ -2,6 +2,7 @@ from flask import Flask, render_template, abort
 from requests import get
 from base64 import b64decode
 import logging
+from time import sleep
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -35,6 +36,7 @@ def fetch(url):
     # if r.status_code == 404:
         # return abort(404)
     # return r.content
+    sleep(3)
     return open("test.html", "r").read()
 
 
