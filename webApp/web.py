@@ -1,7 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
+from requests import get
+from base64 import b64decode
+import logging
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 app = Flask(__name__)
-app.secret_key = "KEY"
 
 
 def get_links():
@@ -24,8 +28,18 @@ def scrap():
     return render_template("scrap.html")
 
 
+@app.route("/fetch/<url>")
+def fetch(url):
+    url = b64decode(url).decode()
+    # r = get(url)
+    # if r.status_code == 404:
+        # return abort(404)
+    # return r.content
+    return open("test.html", "r").read()
+
+
 @app.route("/get")
-def get():
+def get_links():
     matrix = get_links()
     return str(matrix).replace("'", '"')
 
