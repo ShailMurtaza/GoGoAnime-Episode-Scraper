@@ -19,14 +19,6 @@ def index():
     return render_template("index.html")
 
 
-"""
-@app.route("/get/<int:index>")
-def get():
-    matrix = get_links()
-    return render_template("index.html")
-"""
-
-
 @app.route("/get")
 def get():
     matrix = get_links()
