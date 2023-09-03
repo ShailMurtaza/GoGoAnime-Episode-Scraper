@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block title %}Scrap GoGo Anime{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/static/scrap.css">
+{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Fetch & Save download links</h1>
+    <input type="text" placeholder="Enter URL" class="input" id="url_inp">
+    <button type="button" class="btn btn-orange" onclick="scrap()">SCRAP</button>
+    <div id="output"></div>
+</main>
+<script src="/static/scrap.js"></script>
+{% endblock %}
+

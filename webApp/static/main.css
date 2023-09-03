@@ -18,9 +18,9 @@ h1 {
     font-size: large;
     text-align: center;
     padding: 10px;
-    margin-right: 10px;
     margin-top: 10px;
     min-width: 100px;
+    width: 100%;
 
     border: none;
     outline: none;
@@ -35,4 +35,13 @@ h1 {
 
 .btn-orange:hover {
     background-color: grey;
+}
+
+.input {
+    box-sizing: border-box;
+    font-size: large;
+    padding: 10px;
+    outline: none;
+    width: 100%;
+    border: 1px solid rgb(56, 56, 56);
 }

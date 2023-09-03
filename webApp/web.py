@@ -19,6 +19,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/scrap")
+def scrap():
+    return render_template("scrap.html")
+
+
 @app.route("/get")
 def get():
     matrix = get_links()
