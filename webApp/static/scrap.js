@@ -13,14 +13,32 @@ async function scrap() {
     }
     scrap_btn.disabled = true // disable scrap button
     // if input box is not empty
-    anime_url = btoa(anime_url) // encode url to base 64
-    output("FETCHING ...")
-    let html = await fetch_data("/fetch/" + anime_url) // get HTML data of url using fetch api of server
-    output("FETCHED ...")
-    anime_url = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
-    output("URL has been generated ...")
-    console.log(anime_url)
 
+    output("FETCHING ...")
+    let html = await fetch_data("/fetch/" + btoa(anime_url)) // get HTML data of url using fetch api of server
+    output("FETCHED ...")
+    let full_api_url = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
+    output("URL has been generated ...")
+
+    full_api_url = btoa(full_api_url)
+    html = await fetch_data("/test/fetch/" + full_api_url) // get HTML data of url using fetch api of server
+    ep_list = ep_list = get_ep_list(html, anime_url)
+    console.log(ep_list)
+}
+
+
+function get_ep_list(data, anime_url) {
+    let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
+    let a_href = htmlDoc.getElementsByTagName("a")
+    let ep_list = [] // array to store all episodes links
+
+    anime_url = new URL(anime_url)
+    let main_url = `${anime_url.protocol}//${anime_url.hostname}`
+    for (let i=0;i<a_href.length;i++) {
+        let link = main_url + a_href[i].getAttribute("href").trim()
+        ep_list.push(link)
+    }
+    return ep_list
 }
 
 

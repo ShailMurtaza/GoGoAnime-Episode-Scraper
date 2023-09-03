@@ -39,6 +39,11 @@ def fetch(url):
     return open("test.html", "r").read()
 
 
+@app.route("/test/fetch/<url>")
+def fetch_list(url):
+    return open("test_list.html", "r").read()
+
+
 @app.route("/get")
 def get_links():
     matrix = get_links()
