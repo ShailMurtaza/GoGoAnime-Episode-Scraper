@@ -1,24 +1,7 @@
-<!doctype HTML>
-<html>
-  <head>
-    <title>
-      GOGO Anime
-    </title>
-    <link rel="stylesheet" href="/static/main.css">
-  </head>
-  <body>
-    <main>
-      <h1 id="title"></h1>
-      <div class="iframe_container">
-        <iframe id="download_frame"></iframe>
-      </div>
-      <div>
-        <button onclick='prev_ep()' class="btn-nav">PREVIOUS</button>
-        <button onclick='next_ep()' class="btn-nav" style="float: right;">NEXT</button>
-      </div>
-
-      <div id="links_container"></div>
-    </main>
-    <script src="/static/main.js"></script>
-  </body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}GoGo Anime{% endblock %}
+<main>
+    <h1>GoGo Anime List</h1>
+</main>
+{% block body %}
+{% endblock %}

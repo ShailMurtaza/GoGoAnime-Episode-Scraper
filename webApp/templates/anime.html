@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block title %}Anime{% endblock %}
+
+{% block body %}
+<main>
+	<h1 id="title"></h1>
+	<div class="iframe_container">
+		<iframe id="download_frame"></iframe>
+	</div>
+	<div>
+		<button onclick='prev_ep()' class="btn-nav">PREVIOUS</button>
+		<button onclick='next_ep()' class="btn-nav" style="float: right;">NEXT</button>
+	</div>
+
+	<div id="links_container"></div>
+</main>
+<script src="/static/anime.js"></script>
+{% endblock %}
