@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-from flask import Flask, request, render_template, abort
+from flask import Flask, request, render_template, abort, redirect
 from flask_sqlalchemy import SQLAlchemy
 from requests import get
 from base64 import b64decode
 import logging
-from to_dict import anime_to_dict
+from to_dict import anime_to_dict, ep_to_dict
 
 
 log = logging.getLogger('werkzeug')
@@ -38,6 +38,16 @@ def index():
     anime = Anime.query.all()
     anime = anime_to_dict(anime)
     return render_template("index.html", anime=anime)
+
+
+@app.route("/get_anime/<int:ID>")
+def get_anime(ID):
+    anime = Anime.query.get(ID)
+    if anime:
+        ep_list = EP_list.query.filter_by(anime_id=ID)
+        ep_list = ep_to_dict(ep_list)
+        return render_template("anime.html", ep_list=ep_list, ep=anime.index)
+    return redirect("/")
 
 
 @app.route("/scrap")
