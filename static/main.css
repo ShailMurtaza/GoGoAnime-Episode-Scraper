@@ -39,6 +39,7 @@ h1 {
 .btn {
     font-size: large;
     text-align: center;
+    text-decoration: none;
     padding: 10px;
     margin-top: 10px;
     min-width: 100px;
@@ -52,7 +53,7 @@ h1 {
 
 .btn-orange {
     color: white;
-    background-color: orange;
+    background-color: rgb(148, 109, 36);
 }
 
 .btn-orange:hover {

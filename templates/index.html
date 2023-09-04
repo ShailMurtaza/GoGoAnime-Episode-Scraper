@@ -2,6 +2,10 @@
 {% block title %}GoGo Anime{% endblock %}
 {% block body %}
 <main>
-    <h1>GoGo Anime List</h1>
+    <h1>Anime List</h1>
+
+    {% for i in anime %}
+        <a class="btn btn-orange" href="/get_anime/{{i.id}}"><b>{{i.title}}</b></a>
+    {% endfor %}
 </main>
 {% endblock %}
