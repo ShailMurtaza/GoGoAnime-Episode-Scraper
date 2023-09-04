@@ -42,7 +42,7 @@ def index():
 
 @app.route("/get_anime/<int:ID>")
 def get_anime(ID):
-    anime = Anime.query.get(ID)
+    anime = db.session.get(Anime, ID)
     if anime:
         ep_list = EP_list.query.filter_by(anime_id=ID)
         ep_list = ep_to_dict(ep_list)
@@ -52,7 +52,7 @@ def get_anime(ID):
 
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
-    anime = Anime.query.get(ID)
+    anime = db.session.get(Anime, ID)
     ep_num = EP_list.query.filter_by(anime_id=ID).count()
     if anime and ep_num >= 0 and ep_num > index:
         anime.index = index
