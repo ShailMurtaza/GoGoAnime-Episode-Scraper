@@ -34,7 +34,8 @@ class EP_list(db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    anime = Anime.query.all()
+    return render_template("index.html", anime=anime)
 
 
 @app.route("/scrap")
@@ -45,6 +46,7 @@ def scrap():
 @app.route("/save_anime", methods=["POST"])
 def save_anime():
     anime_dict = request.get_json()
+    title = anime_dict.get("title").replace("-", " ").title()
     anime = Anime(title=anime_dict.get("title"))
     db.session.add(anime)
     db.session.commit()
