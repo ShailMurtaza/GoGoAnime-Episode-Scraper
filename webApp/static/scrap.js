@@ -24,7 +24,32 @@ async function scrap() {
     full_api_url = btoa(full_api_url)
     html = await fetch_data("/url_list/fetch") // get HTML data of url using fetch api of server
     let url_list = get_url_list(html, anime_url)
-    console.log(url_list)
+    output("Fetching Download List ...")
+    let ep_list = await get_download_list(url_list)
+    output("Done Fetching Download List ...")
+    console.log(ep_list)
+}
+
+
+async function get_download_list(url_list) {
+    let ep_list = []
+    for(let i=0;i<url_list.length/8;i++) { // Divide length for fast result. Since it is testing phase
+        let html = await fetch_data("/fetch/" + btoa(url_list[i]))
+        let [title, url] = get_download_data(html)
+        ep_list.push([title, url])
+        output(title)
+    }
+    return ep_list
+}
+
+
+// Return title of current episode with download link
+function get_download_data(data) {
+    let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
+
+    let title = htmlDoc.querySelector(".title_name > h2").innerHTML
+    let link = htmlDoc.querySelector(".dowloads > a").getAttribute("href")
+    return [title, link]
 }
 
 
