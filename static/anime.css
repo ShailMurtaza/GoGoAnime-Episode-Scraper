@@ -13,6 +13,10 @@
     border-color: orange;
 }
 
+.btn-ep {
+    width: 100px;
+    margin-right: 5px;
+}
 
 #links_container {
     text-align: center;
