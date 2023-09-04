@@ -15,33 +15,35 @@ async function scrap() {
     // if input box is not empty
 
     output("FETCHING ...")
-    let html = await fetch_data("/fetch/" + btoa(anime_url)) // get HTML data of url using fetch api of server
+    let html = await fetch_data("/main_url/fetch") // get HTML data of url using fetch api of server
     output("FETCHED ...")
-    let full_api_url = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
-    output("URL has been generated ...")
+    let [full_api_url, alias] = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
+    output(`ALIAS: ${alias}`)
+    output(`URL: ${full_api_url}`)
 
     full_api_url = btoa(full_api_url)
-    html = await fetch_data("/test/fetch/" + full_api_url) // get HTML data of url using fetch api of server
-    ep_list = ep_list = get_ep_list(html, anime_url)
-    console.log(ep_list)
+    html = await fetch_data("/url_list/fetch") // get HTML data of url using fetch api of server
+    let url_list = get_url_list(html, anime_url)
+    console.log(url_list)
 }
 
 
-function get_ep_list(data, anime_url) {
+// data will have <ul> tag with <li> and within <li> there will be <a href="one episode URL">
+function get_url_list(data, anime_url) {
     let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
     let a_href = htmlDoc.getElementsByTagName("a")
-    let ep_list = [] // array to store all episodes links
+    let url_list = [] // array to store all episodes links
 
-    anime_url = new URL(anime_url)
-    let main_url = `${anime_url.protocol}//${anime_url.hostname}`
+    anime_url = new URL(anime_url) // For url parsing
+    let main_url = `${anime_url.protocol}//${anime_url.hostname}` // get url without path
     for (let i=0;i<a_href.length;i++) {
-        let link = main_url + a_href[i].getAttribute("href").trim()
-        ep_list.push(link)
+        let link = main_url + a_href[i].getAttribute("href").trim() // main url of GoGo anime + episode path taken fron API
+        url_list.push(link)
     }
-    return ep_list
+    return url_list
 }
 
-
+// Return full API URL for given anime data. It will content of that URL html will contain <ul> with <li> and <a>. Every episode link will be separated by different <a> tag
 function gen_url(data) {
     let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
     // get all parameters to generate URL of GoGo Anime API
@@ -55,7 +57,7 @@ function gen_url(data) {
     let alias = htmlDoc.getElementById("alias_anime").value
 
     let url = `${api_url}?ep_start=${ep_start}&ep_end=${ep_end}&id=${anime_id}&default_ep=${default_ep}&alias=${alias}`
-    return url
+    return [url, alias]
 }
 
 
