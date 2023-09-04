@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}Anime Episodes{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/ep_list.css">
+{% endblock %}
+
+{% block body %}
+<main>
+	<h1 id="title"></h1>
+	<div class="iframe_container">
+		<iframe id="download_frame"></iframe>
+	</div>
+	<div>
+		<button onclick='prev_ep()' class="btn-nav">PREVIOUS</button>
+		<button onclick='next_ep()' class="btn-nav" style="float: right;">NEXT</button>
+	</div>
+
+	<div id="links_container"></div>
+</main>
+<script>
+	const anime_id = {{anime_id}}
+	const all_links = {{ ep_list | tojson }}
+	var ep = {{ep}}
+</script>
+<script src="/static/ep_list.js"></script>
+{% endblock %}
