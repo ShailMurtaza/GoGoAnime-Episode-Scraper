@@ -46,8 +46,18 @@ def get_anime(ID):
     if anime:
         ep_list = EP_list.query.filter_by(anime_id=ID)
         ep_list = ep_to_dict(ep_list)
-        return render_template("anime.html", ep_list=ep_list, ep=anime.index)
+        return render_template("anime.html", anime_id=anime.id, ep_list=ep_list, ep=anime.index)
     return redirect("/")
+
+
+@app.route("/set_index/<int:ID>/<int:index>")
+def set_anime_index(ID, index):
+    anime = Anime.query.get(ID)
+    if anime:
+        anime.index = index
+        db.session.commit()
+        return "True"
+    return "False"
 
 
 @app.route("/scrap")
