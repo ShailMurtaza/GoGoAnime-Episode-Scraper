@@ -5,9 +5,31 @@ body {
     width: 100%;
 }
 
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+.nav-btn {
+    padding: 10px;
+    color: white;
+    background-color: blueviolet;
+    text-align: center;
+    text-decoration: none;
+    width: 48%;
+    transition-duration: 300ms;
+    border: 2px solid rgb(144, 206, 0);
+}
+.nav-btn:hover {
+    background-color: rgb(102, 20, 179);
+}
+
 main {
     height: 100%;
     padding: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
