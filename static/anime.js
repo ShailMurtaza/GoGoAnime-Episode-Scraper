@@ -1,7 +1,6 @@
 var links_container = document.getElementById("links_container")
 var download_frame = document.getElementById("download_frame")
 var title = document.getElementById("title")
-var all_links;
 
 
 function create_link(title, link, ep_index) {
@@ -18,7 +17,6 @@ function show_links(data) {
     }
 }
 
-// function go(link) {window.location.href = link}
 
 function isNumber(str) {
     if (typeof str != "string") return false // we only process strings!
@@ -28,10 +26,8 @@ function isNumber(str) {
 function setEP(num) {
     if (isNumber(num) || Number.isInteger(num)) {
         ep = parseInt(num)
-        localStorage.setItem("ep", ep)
-        console.log(ep)
 
-        let episode_index = all_links.length - ep
+        let episode_index = all_links.length - ep - 1
         let current_ep = all_links[episode_index]
         download_frame.src = current_ep[1]
         title.innerText = current_ep[0]
@@ -44,13 +40,13 @@ show_links(all_links) // create all links at bottom of web page
 
 function next_ep() {
     var nxt_ep = ep + 1;
-    if (nxt_ep <= all_links.length) {
+    if (nxt_ep < all_links.length) {
         setEP(nxt_ep)
     }
 }
 function prev_ep() {
     var prv_ep = ep - 1;
-    if (prv_ep > 0) {
+    if (prv_ep >= 0) {
         setEP(prv_ep)
     }
 }
