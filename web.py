@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from requests import get
 from base64 import b64decode
 import logging
+from to_dict import anime_to_dict
 
 
 log = logging.getLogger('werkzeug')
@@ -35,6 +36,7 @@ class EP_list(db.Model):
 @app.route("/")
 def index():
     anime = Anime.query.all()
+    anime = anime_to_dict(anime)
     return render_template("index.html", anime=anime)
 
 
