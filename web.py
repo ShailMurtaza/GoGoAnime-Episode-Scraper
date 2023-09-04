@@ -53,7 +53,8 @@ def get_anime(ID):
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
     anime = Anime.query.get(ID)
-    if anime:
+    ep_num = EP_list.query.filter_by(anime_id=ID).count()
+    if anime and ep_num >= 0 and ep_num > index:
         anime.index = index
         db.session.commit()
         return "True"
