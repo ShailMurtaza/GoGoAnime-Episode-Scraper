@@ -1,8 +1,9 @@
+#!/usr/bin/python3
 from flask import Flask, render_template, abort
 from requests import get
 from base64 import b64decode
 import logging
-from time import sleep
+
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -32,17 +33,19 @@ def scrap():
 @app.route("/fetch/<url>")
 def fetch(url):
     url = b64decode(url).decode()
-    # r = get(url)
-    # if r.status_code == 404:
-        # return abort(404)
-    # return r.content
+    r = get(url)
+    if r.status_code == 404:
+        return abort(404)
+    return r.content
+
+
+@app.route("/main_url/fetch")
+def fetch_main_url():
     return open("test.html", "r").read()
 
-
-@app.route("/test/fetch/<url>")
-def fetch_list(url):
+@app.route("/url_list/fetch")
+def fetch_list():
     return open("test_list.html", "r").read()
-
 
 @app.route("/get")
 def get_links():
