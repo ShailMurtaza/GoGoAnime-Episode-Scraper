@@ -26,6 +26,7 @@ function isNumber(str) {
 function setEP(num) {
     if (isNumber(num) || Number.isInteger(num)) {
         ep = parseInt(num)
+        fetch(`/set_index/${anime_id}/${ep}`).then(r=>{return r.text()}).then(text=>console.log("setEP Result:" , text))
 
         let episode_index = all_links.length - ep - 1
         let current_ep = all_links[episode_index]
