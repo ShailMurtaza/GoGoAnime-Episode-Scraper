@@ -1,56 +1,24 @@
-var links_container = document.getElementById("links_container")
-var download_frame = document.getElementById("download_frame")
-var title = document.getElementById("title")
+const anime_div = document.getElementById("anime_list")
+const search_inp = document.getElementById("search")
 
 
-function create_link(title, link, ep_index) {
-    const btn = document.createElement("button")
-    btn.innerText = `EP | ${ep_index}`
-    btn.className = "btn btn-orange btn-ep"
-    btn.onclick = () => { setEP(ep_index) }
-    links_container.appendChild(btn)
+function search() {
+    const word = search_inp.value.trim().toLowerCase()
+    let anime_list = {}
+    for (const i in full_anime_list) {
+        let title = full_anime_list[i].toLowerCase()
+        if (title.includes(word)) anime_list[i] = title
+    }
+    show_anime(anime_list)
 }
 
-function show_links(data) {
-    for (let i = 0; i < data.length; i++) {
-        create_link(data[i][0], data[i][1], data.length - i)
+
+// display anime list
+function show_anime(anime_list) {
+    anime_div.innerHTML = ""
+    for (const i in anime_list) {
+        anime_div.innerHTML += `<a class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>`
     }
 }
 
-
-function isNumber(str) {
-    if (typeof str != "string") return false // we only process strings!
-    return !isNaN(str) && !isNaN(parseFloat(str))
-}
-
-function setEP(num) {
-    if (isNumber(num) || Number.isInteger(num)) {
-        ep = parseInt(num)
-        if (ep >= all_links.length || ep < 0) {
-            ep = 0
-        }
-        fetch(`/set_index/${anime_id}/${ep}`).then(r=>{return r.text()}).then(text=>console.log("setEP Result:" , text))
-
-        let episode_index = all_links.length - ep - 1
-        let current_ep = all_links[episode_index]
-        download_frame.src = current_ep[1]
-        title.innerText = current_ep[0]
-    }
-}
-
-
-setEP(ep)
-show_links(all_links) // create all links at bottom of web page
-
-function next_ep() {
-    var nxt_ep = ep + 1;
-    if (nxt_ep < all_links.length) {
-        setEP(nxt_ep)
-    }
-}
-function prev_ep() {
-    var prv_ep = ep - 1;
-    if (prv_ep >= 0) {
-        setEP(prv_ep)
-    }
-}
+show_anime(full_anime_list) // Show all anime at start

@@ -37,7 +37,7 @@ class EP_list(db.Model):
 def index():
     anime = Anime.query.all()
     anime = anime_to_dict(anime)
-    return render_template("index.html", anime=anime)
+    return render_template("anime.html", anime=anime)
 
 
 @app.route("/get_anime/<int:ID>")
@@ -46,7 +46,7 @@ def get_anime(ID):
     if anime:
         ep_list = EP_list.query.filter_by(anime_id=ID)
         ep_list = ep_to_dict(ep_list)
-        return render_template("anime.html", anime_id=anime.id, ep_list=ep_list, ep=anime.index)
+        return render_template("ep_list.html", anime_id=anime.id, ep_list=ep_list, ep=anime.index)
     return redirect("/")
 
 
