@@ -16,14 +16,13 @@ async function scrap() {
     // if input box is not empty
 
     output("FETCHING ...")
-    let html = await fetch_data("/main_url/fetch") // get HTML data of url using fetch api of server
+    let html = await fetch_data(anime_url) // get HTML data of url using fetch api of server
     output("FETCHED ...")
     let [full_api_url, alias] = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
     output(`ALIAS: ${alias}`)
     output(`URL: ${full_api_url}`)
 
-    full_api_url = btoa(full_api_url)
-    html = await fetch_data("/url_list/fetch") // get HTML data of url using fetch api of server
+    html = await fetch_data(full_api_url) // get HTML data of url using fetch api of server
     let url_list = get_url_list(html, anime_url)
     output("Fetching Download List ...")
     let ep_list = await get_download_list(url_list)
@@ -42,8 +41,8 @@ async function scrap() {
 
 async function get_download_list(url_list) {
     let ep_list = []
-    for(let i=0;i<2;i++) { // Divide length for fast result. Since it is testing phase
-        let html = await fetch_data("/fetch/" + btoa(url_list[i]))
+    for(let i=0;i<url_list.length;i++) { // Divide length for fast result. Since it is testing phase
+        let html = await fetch_data(url_list[i])
         let [title, url] = get_download_data(html)
         ep_list.push([title, url])
         output(title)
@@ -96,8 +95,9 @@ function gen_url(data) {
 
 
 async function fetch_data(url) {
+    url = btoa(url) // encode url with base64
     try {
-        const response = await fetch(url)
+        const response = await fetch("/fetch/" + url)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`)
         }

@@ -69,15 +69,6 @@ def fetch(url):
     return r.content
 
 
-@app.route("/main_url/fetch")
-def fetch_main_url():
-    return open("test.html", "r").read()
-
-@app.route("/url_list/fetch")
-def fetch_list():
-    return open("test_list.html", "r").read()
-
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
 
