@@ -3,9 +3,11 @@
 {% block body %}
 <main>
     <h1>Anime List</h1>
-
-    {% for i in anime %}
-        <a class="btn btn-orange" href="/get_anime/{{i.id}}"><b>{{i.title}}</b></a>
-    {% endfor %}
+    <input type="text" class="input" onkeyup="search()" placeholder="Search" id="search">
+    <div id="anime_list"></div>
 </main>
+<script>
+    const full_anime_list = {{anime | tojson}}
+</script>
+<script src="/static/anime_list.js"></script>
 {% endblock %}
