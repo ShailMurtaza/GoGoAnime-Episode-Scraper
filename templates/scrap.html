@@ -1,13 +1,9 @@
 {% extends 'layout.html' %}
 {% block title %}Scrap GoGo Anime{% endblock %}
 
-{% block head %}
-    <link rel="stylesheet" href="/static/scrap.css">
-{% endblock %}
-
 {% block body %}
 <main>
-    <h1>Fetch & Save download links</h1>
+    <h1>Scraping</h1>
     <input type="text" placeholder="Enter URL" class="input" id="url_inp" value="https://gogoanime.hu/vinland-saga-season-2-dub-episode-1">
     <button type="button" class="btn btn-orange" onclick="scrap()" id="scrap_btn">SCRAP</button>
     <p id="output"></p>
