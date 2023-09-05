@@ -17,5 +17,9 @@
 
 	<div id="links_container"></div>
 </main>
+<script>
+	const ep_list = {{ ep_list | tojson }}
+	let ep = {{ep}}
+</script>
 <script src="/static/anime.js"></script>
 {% endblock %}
