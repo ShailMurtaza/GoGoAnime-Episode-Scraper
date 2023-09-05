@@ -12,7 +12,6 @@ log.setLevel(logging.ERROR)
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 app.app_context().push()
@@ -83,6 +82,18 @@ def save_anime():
     db.session.commit()
     
     return "True"
+
+
+@app.route("/del_anime/<int:ID>")
+def del_anime(ID):
+    anime = db.session.get(Anime, ID)
+    if anime:
+        ep_list = EP_list.query.filter_by(anime_id=ID)
+        db.session.delete(anime)
+        for i in ep_list:
+            db.session.delete(i)
+        db.session.commit()
+    return redirect("/")
 
 
 @app.route("/fetch/<url>")

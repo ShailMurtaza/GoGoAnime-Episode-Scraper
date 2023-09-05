@@ -67,6 +67,22 @@ h1 {
     cursor: not-allowed;
 }
 
+.btn-danger {
+    padding: 5px;
+    color: white;
+    background-color: rgb(179, 14, 14);
+    /* width: 20%; */
+    width: fit-content;
+    margin-left: 5px;
+    transition-duration: 300ms;
+}
+.btn-danger:hover {
+    background-color: red;
+}
+.btn-danger > img {
+    width: 25px;
+}
+
 .input {
     box-sizing: border-box;
     font-size: large;
@@ -79,4 +95,8 @@ h1 {
 #anime_list {
     display: flex;
     flex-direction: column;
+}
+.row {
+    display: flex;
+    flex-direction: row;
 }

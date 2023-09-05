@@ -17,7 +17,18 @@ function search() {
 function show_anime(anime_list) {
     anime_div.innerHTML = ""
     for (const i in anime_list) {
-        anime_div.innerHTML += `<a class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>`
+        anime_div.innerHTML += `<div class="row">
+            <a class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
+            <button type="button" class="btn btn-danger" onclick="del_anime(${i})"><img src="/static/trash.png"></button>
+        </div>`
+    }
+}
+
+
+function del_anime(ID) {
+    let ans = confirm(`You Sure you want to delete ANIME: ${full_anime_list[ID]}`)
+    if (ans) {
+        window.location.href = "/del_anime/" + ID
     }
 }
 
