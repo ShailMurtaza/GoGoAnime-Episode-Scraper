@@ -3,7 +3,7 @@ var download_frame = document.getElementById("download_frame")
 var title = document.getElementById("title")
 
 
-function create_link(title, link, ep_index) {
+function create_link(ep_index) {
     const btn = document.createElement("button")
     btn.innerText = `EP | ${ep_index}`
     btn.className = "btn btn-orange btn-ep"
@@ -13,7 +13,7 @@ function create_link(title, link, ep_index) {
 
 function show_links(data) {
     for (let i = 0; i < data.length; i++) {
-        create_link(data[i][0], data[i][1], data.length - i)
+        create_link(data.length - i)
     }
 }
 
