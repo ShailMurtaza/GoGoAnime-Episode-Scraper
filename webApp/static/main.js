@@ -51,7 +51,7 @@ function setEP(num) {
 
 function init(response) {
   all_links = response
-  if ( isNumber(ep) ) {
+  if ( isNumber(ep) && ep <= all_links.length && ep > 0) {
     setEP(ep)
   }
   else {
