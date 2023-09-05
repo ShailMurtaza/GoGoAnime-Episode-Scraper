@@ -7,7 +7,7 @@ function create_link(title, link, ep_index) {
     const btn = document.createElement("button")
     btn.innerText = `EP | ${ep_index}`
     btn.className = "btn btn-orange btn-ep"
-    btn.onclick = () => { setEP(ep_index) }
+    btn.onclick = () => { setEP(ep_index-1) }
     links_container.appendChild(btn)
 }
 
