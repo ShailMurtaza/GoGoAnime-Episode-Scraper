@@ -106,5 +106,10 @@ def fetch(url):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    HOST = "0.0.0.0"
+    PORT = 5050
+    print("+-------------------------------+")
+    print(f"URL: http://{HOST}:{PORT}")
+    print("+-------------------------------+")
+    app.run(host=HOST, port=PORT)
 
