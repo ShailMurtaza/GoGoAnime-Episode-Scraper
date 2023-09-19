@@ -36,6 +36,11 @@ h1 {
     text-align: center;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
 .btn {
     box-sizing: border-box;
     font-size: large;
@@ -71,7 +76,6 @@ h1 {
     padding: 5px;
     color: white;
     background-color: rgb(179, 14, 14);
-    /* width: 20%; */
     width: fit-content;
     margin-left: 5px;
     transition-duration: 300ms;
@@ -79,7 +83,20 @@ h1 {
 .btn-danger:hover {
     background-color: red;
 }
-.btn-danger > img {
+
+.btn-primary {
+    padding: 5px;
+    color: white;
+    background-color: rgb(14, 30, 179);
+    width: fit-content;
+    margin-left: 5px;
+    transition-duration: 300ms;
+}
+.btn-primary:hover {
+    background-color: rgb(22, 0, 146);
+}
+
+.btn > img {
     width: 25px;
 }
 
@@ -92,11 +109,16 @@ h1 {
     border: 1px solid rgb(56, 56, 56);
 }
 
+.input-title {
+    border: 1px solid rgb(56, 56, 56);
+    cursor: text;
+}
+
+.edit_title {
+    display: none;
+}
+
 #anime_list {
     display: flex;
     flex-direction: column;
-}
-.row {
-    display: flex;
-    flex-direction: row;
 }

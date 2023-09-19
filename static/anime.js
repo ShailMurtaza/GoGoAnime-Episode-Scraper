@@ -17,10 +17,18 @@ function search() {
 function show_anime(anime_list) {
     anime_div.innerHTML = ""
     for (const i in anime_list) {
-        anime_div.innerHTML += `<div class="row">
-            <a class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
-            <button type="button" class="btn btn-danger" onclick="del_anime(${i})"><img src="/static/trash.png"></button>
-        </div>`
+        anime_div.innerHTML += `
+        <div class="row" id="anime_row_${i}">
+            <a id="link_${i}" class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
+            <button type="button" class="btn btn-primary" onclick="edit_title(${i})"><img src="/static/pencil.webp"></button>
+            <button type="button" class="btn btn-danger" onclick="del_anime(${i})"><img src="/static/trash.webp"></button>
+        </div>
+        <div class="row edit_title" id="edit_title_row_${i}">
+            <input id="input_${i}" type="text" class="btn input-title" placeholder="Title" value="${anime_list[i]}">
+            <button type="button" class="btn btn-primary" onclick="save_title(${i})"><img src="/static/floppy.webp"></button>
+            <button type="button" class="btn btn-danger" onclick="hide_edit_title(${i})"><img src="/static/cancel.webp"></button>
+        </div>
+        `
     }
 }
 
@@ -31,5 +39,54 @@ function del_anime(ID) {
         window.location.href = "/del_anime/" + ID
     }
 }
+
+
+function edit_title(ID) {
+    let anime_row = document.getElementById("anime_row_" + ID)
+    let edit_title_row = document.getElementById("edit_title_row_" + ID)
+
+    anime_row.style.display = "none"
+    edit_title_row.style.display = "flex"
+}
+
+
+function hide_edit_title(ID) {
+    let anime_row = document.getElementById("anime_row_" + ID)
+    let edit_title_row = document.getElementById("edit_title_row_" + ID)
+
+    anime_row.style.display = "flex"
+    edit_title_row.style.display = "none"
+}
+
+
+async function save_title(ID) {
+    let title = document.getElementById("input_" + ID).value
+    let link = document.getElementById("link_" + ID)
+    if (title) {
+        try {
+            const response = await fetch("/edit_title/" + ID, {
+                "method": "POST",
+                "headers": {"Content-Type": "application/json"},
+                "body": JSON.stringify({"title": title})
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response}`)
+            }
+            const data = await response.text()
+            if (data == "False") {
+                alert("False!")
+            }
+            else {
+                link.innerHTML = `<b>${data}</b>`
+            }
+            hide_edit_title(ID)
+        } catch(error) {
+            alert("ERROR, check console!")
+            console.error("ERROR:", error)
+        }
+    }
+}
+
 
 show_anime(full_anime_list) // Show all anime at start

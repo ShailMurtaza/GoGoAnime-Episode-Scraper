@@ -96,6 +96,17 @@ def del_anime(ID):
     return redirect("/")
 
 
+@app.route("/edit_title/<int:ID>", methods=["POST"])
+def edit_title(ID):
+    title = request.get_json().get("title")
+    anime = db.session.get(Anime, ID)
+    if anime and title:
+        anime.title = title.title()
+        db.session.commit()
+        return str(anime.title)
+    return "False"
+
+
 @app.route("/fetch/<url>")
 def fetch(url):
     url = b64decode(url).decode()
@@ -111,5 +122,5 @@ if __name__ == "__main__":
     print("+-------------------------------+")
     print(f"URL: http://{HOST}:{PORT}")
     print("+-------------------------------+")
-    app.run(host=HOST, port=PORT)
+    app.run(host=HOST, port=PORT, debug=True)
 
