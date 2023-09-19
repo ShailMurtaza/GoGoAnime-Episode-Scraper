@@ -1,4 +1,5 @@
 __pycache__
 *.log
-download_links.txt
+instance
+*.db
 
