@@ -60,7 +60,8 @@ function hide_edit_title(ID) {
 
 
 async function save_title(ID) {
-    let title = document.getElementById("input_" + ID).value
+    let title_inp = document.getElementById("input_" + ID)
+    let title = title_inp.value
     let link = document.getElementById("link_" + ID)
     if (title) {
         try {
@@ -79,6 +80,7 @@ async function save_title(ID) {
             }
             else {
                 link.innerHTML = `<b>${data}</b>`
+                title_inp.value = data
             }
             hide_edit_title(ID)
         } catch(error) {
