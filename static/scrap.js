@@ -71,7 +71,7 @@ async function get_download_list(url_list) {
 
 // Return title of current episode with download link
 function get_download_data(data) {
-    let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
+    let htmlDoc = HTML(data) // Parse HTML
 
     let title = htmlDoc.querySelector(".title_name > h2").innerHTML
     let link = htmlDoc.querySelector(".dowloads > a").getAttribute("href")
@@ -81,7 +81,7 @@ function get_download_data(data) {
 
 // data will have <ul> tag with <li> and within <li> there will be <a href="one episode URL">
 function get_url_list(data, anime_url) {
-    let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
+    let htmlDoc = HTML(data) // Parse HTML
     let a_href = htmlDoc.getElementsByTagName("a")
     let url_list = [] // array to store all episodes links
 
@@ -96,7 +96,7 @@ function get_url_list(data, anime_url) {
 
 // Return full API URL for given anime data. It will content of that URL html will contain <ul> with <li> and <a>. Every episode link will be separated by different <a> tag
 function gen_url(data) {
-    let htmlDoc = parser.parseFromString(data, "text/html") // Parse HTML
+    let htmlDoc = HTML(data) // Parse HTML
     // get all parameters to generate URL of GoGo Anime API
     let episode_page = htmlDoc.getElementById("episode_page")
     let a_href = episode_page.getElementsByTagName("a")
@@ -150,8 +150,18 @@ async function save_anime(title, ep_list) {
 
 
 function output(text) {
-    if (text)
-        output_cont.innerHTML += text + "</br>"
+    if (text) {
+        text += "</br>"
+        htmlDoc = HTML(text).body
+        output_cont.appendChild(htmlDoc)
+    }
     else
         output_cont.innerHTML = ""
+}
+
+
+// Prase string as HTML DOM
+function HTML(string) {
+    let htmlDoc = parser.parseFromString(string, "text/html") // Parse HTML
+    return htmlDoc
 }
