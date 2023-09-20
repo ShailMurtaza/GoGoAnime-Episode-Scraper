@@ -16,6 +16,7 @@ nav {
     padding: 10px;
     color: white;
     background-color: blueviolet;
+    font-size: large;
     text-align: center;
     text-decoration: none;
     width: 48%;
@@ -122,4 +123,25 @@ h1 {
 #anime_list {
     display: flex;
     flex-direction: column;
+}
+
+
+@media screen and (max-width: 500px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    .nav-btn {
+        width: 100%;
+    }
+    main {
+        padding: 10px;
+    }
+    .btn {
+        min-width: fit-content;
+    }
+    .btn > img {
+        width: 20px;
+    }
 }
