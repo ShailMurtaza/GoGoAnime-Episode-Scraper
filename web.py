@@ -124,7 +124,7 @@ if __name__ == "__main__":
     HOST = "0.0.0.0"
     PORT = 5050
     print("+-------------------------------+")
-    print(f"URL: http://{HOST}:{PORT}")
+    print(f"URL: http://localhost:{PORT}")
     print("+-------------------------------+")
     app.run(host=HOST, port=PORT, debug=True)
 
