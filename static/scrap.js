@@ -152,8 +152,10 @@ async function save_anime(title, ep_list) {
 function output(text) {
     if (text) {
         text += "</br>"
-        htmlDoc = HTML(text).body
-        output_cont.appendChild(htmlDoc)
+        let htmlDoc = HTML(text)
+        while (htmlDoc.body.firstChild) {
+            output_cont.appendChild(htmlDoc.body.firstChild);
+        }
     }
     else
         output_cont.innerHTML = ""

@@ -1,6 +1,15 @@
 {% extends 'layout.html' %}
 {% block title %}Scrap GoGo Anime{% endblock %}
-
+{% block head %}
+<style>
+    #output {
+        max-height: 50%;
+        overflow: scroll;
+        border: 1px solid rgb(56, 56, 56);
+        padding: 15px;
+    }
+</style>
+{% endblock %}
 {% block body %}
 <!-- example: https://gogoanime.hu/vinland-saga-season-2-dub-episode-1 -->
 <main>
@@ -11,4 +20,3 @@
 </main>
 <script src="/static/scrap.js"></script>
 {% endblock %}
-
