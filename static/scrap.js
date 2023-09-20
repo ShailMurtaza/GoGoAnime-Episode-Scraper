@@ -6,48 +6,66 @@ const parser = new DOMParser();
 
 
 async function scrap() {
-    output("") // Clear Output
-    let anime_url = url_inp.value.trim() // get url from input box
-    if (!anime_url) { // if url_inp is empty
-        output("Enter URL")
-        return
-    }
-    scrap_btn.disabled = true // disable scrap button
-    // if input box is not empty
+    try {
+        output("") // Clear Output
+        let anime_url = url_inp.value.trim() // get url from input box
+        if (!anime_url) { // if url_inp is empty
+            output("Enter URL")
+            return
+        }
+        scrap_btn.disabled = true // disable scrap button
+        // if input box is not empty
 
-    output("FETCHING ...")
-    let html = await fetch_data(anime_url) // get HTML data of url using fetch api of server
-    output("FETCHED ...")
-    let [full_api_url, alias] = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
-    output(`ALIAS: ${alias}`)
-    output(`URL: ${full_api_url}`)
+        output("FETCHING ...")
+        let html = await fetch_data(anime_url) // get HTML data of url using fetch api of server
+        if (html == "False") {
+            throw "False Output"
+        }
+        output("FETCHED ...")
 
-    html = await fetch_data(full_api_url) // get HTML data of url using fetch api of server
-    let url_list = get_url_list(html, anime_url)
-    output("Fetching Download List ...")
-    let ep_list = await get_download_list(url_list)
-    output("Done Fetching Download List ...")
-    output("Saving data in database ...")
-    let result = await save_anime(alias, ep_list)
-    if (result == "True") {
-        output("<b>Data Saved Successfully ...</b>")
-    }
-    else {
+        let [full_api_url, alias] = gen_url(html) // generate full GoGo Anime URL to fetch links of all episodes
+        output(`ALIAS: ${alias}`)
+        output(`URL: ${full_api_url}`)
+
+        html = await fetch_data(full_api_url) // get HTML data of url using fetch api of server
+        if (html == "False") {
+            throw "False Output"
+        }
+        let url_list = get_url_list(html, anime_url)
+        output("Fetching Download List ...")
+        let ep_list = await get_download_list(url_list)
+        output("Done Fetching Download List ...")
+        output("Saving data in database ...")
+        let result = await save_anime(alias, ep_list)
+        if (result == "True") {
+            output("<b>Data Saved Successfully ...</b>")
+        }
+        else {
+            throw "False Output"
+        }
+        scrap_btn.disabled = false // enable scrap button
+    } catch (error) {
         output("<i><b>Something Went Wrong ...</b></i>")
+        output("ERROR: " + error)
+        scrap_btn.disabled = false // enable scrap button
     }
-    scrap_btn.disabled = false // enable scrap button
 }
 
 
 async function get_download_list(url_list) {
-    let ep_list = []
-    for(let i=0;i<url_list.length;i++) { // Divide length for fast result. Since it is testing phase
-        let html = await fetch_data(url_list[i])
-        let [title, url] = get_download_data(html)
-        ep_list.push([title, url])
-        output(title)
+    try {
+        let ep_list = []
+        for(let i=0;i<url_list.length;i++) { // Divide length for fast result. Since it is testing phase
+            let html = await fetch_data(url_list[i])
+            let [title, url] = get_download_data(html)
+            ep_list.push([title, url])
+            output(title)
+        }
+        return ep_list
     }
-    return ep_list
+    catch (err) {
+        throw err
+    }
 }
 
 
@@ -125,7 +143,8 @@ async function save_anime(title, ep_list) {
         const data = await response.text()
         return data
     } catch(error) {
-        console.error("ERROR:", error)
+        console.error("ERROR: ", error)
+        throw error
     }
 }
 

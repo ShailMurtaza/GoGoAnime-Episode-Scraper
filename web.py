@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from flask import Flask, request, render_template, abort, redirect
 from flask_sqlalchemy import SQLAlchemy
-from requests import get
+import requests
 from base64 import b64decode
 import logging
 from to_dict import anime_to_dict, ep_to_dict
@@ -109,11 +109,15 @@ def edit_title(ID):
 
 @app.route("/fetch/<url>")
 def fetch(url):
-    url = b64decode(url).decode()
-    r = get(url)
-    if r.status_code == 404:
-        return abort(404)
-    return r.content
+    try:
+        url = b64decode(url).decode()
+        r = requests.get(url)
+        if r.status_code == 404:
+            return abort(404)
+        return r.content
+    except Exception as err:
+        print(err)
+        return "False"
 
 
 if __name__ == "__main__":
