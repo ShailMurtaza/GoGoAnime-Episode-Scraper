@@ -34,7 +34,7 @@ main {
     flex-direction: column;
 }
 
-h1 {
+.title {
     text-align: center;
 }
 
@@ -130,16 +130,21 @@ h1 {
     nav {
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        padding: 5px 20px;
     }
     .nav-btn {
         width: 100%;
+        font-size: medium;
     }
     main {
         padding: 10px;
     }
     .btn {
         min-width: fit-content;
+        font-size: medium;
+    }
+    .input {
+        font-size: medium;
     }
     .btn > img {
         width: 20px;
