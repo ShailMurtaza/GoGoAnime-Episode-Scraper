@@ -52,6 +52,7 @@ main {
     margin-top: 10px;
     min-width: 100px;
     width: 100%;
+    overflow: scroll;
 
     border: none;
     outline: none;
@@ -126,7 +127,7 @@ main {
 }
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
     nav {
         flex-direction: column;
         align-items: center;
@@ -142,6 +143,9 @@ main {
     .btn {
         min-width: fit-content;
         font-size: medium;
+    }
+    .link {
+        min-width: 0;
     }
     .input {
         font-size: medium;

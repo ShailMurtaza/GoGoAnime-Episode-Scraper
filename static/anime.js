@@ -19,7 +19,7 @@ function show_anime(anime_list) {
     for (const i in anime_list) {
         anime_div.innerHTML += `
         <div class="row" id="anime_row_${i}">
-            <a id="link_${i}" class="btn btn-orange" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
+            <a id="link_${i}" class="btn btn-orange link" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
             <button type="button" class="btn btn-primary" onclick="edit_title(${i})"><img src="/static/pencil.webp"></button>
             <button type="button" class="btn btn-danger" onclick="del_anime(${i})"><img src="/static/trash.webp"></button>
         </div>
