@@ -49,6 +49,14 @@ def get_anime(ID):
     return redirect("/")
 
 
+@app.route("/get_index/<int:ID>")
+def get_anime_index(ID):
+    anime = db.session.get(Anime, ID)
+    if anime:
+        return str(anime.index)
+    return "False"
+
+
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
     anime = db.session.get(Anime, ID)

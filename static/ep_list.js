@@ -39,9 +39,6 @@ function setEP(num) {
 }
 
 
-setEP(ep)
-show_links(all_links) // create all links at bottom of web page
-
 function next_ep() {
     var nxt_ep = ep + 1;
     if (nxt_ep < all_links.length) {
@@ -54,3 +51,24 @@ function prev_ep() {
         setEP(prv_ep)
     }
 }
+
+
+async function init() {
+    fetch(`/get_index/${anime_id}`)
+    .then(resp=> {
+        return resp.text()
+    })
+    .then(resp=>{
+        if (resp == "False") {
+            console.error("Something went wrong. OUTPUT: False")
+        }
+        else {
+            ep = resp
+            console.log(`Fetched EP: ${ep}`)
+            setEP(ep)
+            show_links(all_links)
+        }
+    })
+}
+
+init()
