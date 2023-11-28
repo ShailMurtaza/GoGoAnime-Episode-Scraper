@@ -32,6 +32,9 @@ async function scrap() {
             throw "False Output"
         }
         let url_list = get_url_list(html, anime_url)
+        if (html == "") {
+            throw "API URL response is empty. I guess something wrong with GoGoAnime 🤷‍♂️"
+        }
         output("Fetching Download List ...")
         let ep_list = await get_download_list(url_list)
         output("Done Fetching Download List ...")
@@ -45,8 +48,8 @@ async function scrap() {
         }
         scrap_btn.disabled = false // enable scrap button
     } catch (error) {
-        output("<i><b>Something Went Wrong ...</b></i>")
-        output("ERROR: " + error)
+        output(`<span class="error">Something Went Wrong ...</span>`)
+        output(`<span class="error">ERROR: ${error}</span>`)
         scrap_btn.disabled = false // enable scrap button
     }
 }
