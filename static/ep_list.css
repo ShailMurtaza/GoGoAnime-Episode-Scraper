@@ -16,6 +16,7 @@
 .btn-ep {
     width: 100px;
     margin-right: 5px;
+    font-size: medium;
 }
 
 #links_container {
@@ -39,6 +40,9 @@
     }
     .btn-ep {
         width: fit-content;
+        font-size: small;
+    }
+    .btn-nav {
         font-size: small;
     }
 }
