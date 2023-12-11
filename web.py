@@ -21,6 +21,7 @@ class Anime(db.Model):
     __tablename__ = "Anime"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, nullable=False)
+    anime_url = db.Column(db.Text, nullable=False)
     path = db.Column(db.Text, nullable=True)
     index = db.Column(db.Integer, default=0)
 
@@ -45,7 +46,7 @@ def get_anime(ID):
     if anime:
         ep_list = EP_list.query.filter_by(anime_id=ID)
         ep_list = ep_to_dict(ep_list)
-        return render_template("ep_list.html", anime_id=anime.id, ep_list=ep_list, ep=anime.index)
+        return render_template("ep_list.html", anime_id=anime.id, ep_list=ep_list)
     return redirect("/")
 
 
@@ -73,13 +74,38 @@ def scrap():
     return render_template("scrap.html")
 
 
+@app.route("/update_anime/<int:ID>")
+def update_anime(ID):
+    anime = db.session.get(Anime, ID)
+    if not anime:
+        return redirect("/")
+    return render_template("scrap.html", anime_id=anime.id, anime_url=anime.anime_url, update=True)
+
+
+@app.route("/anime_count/<int:ID>")
+def anime_count(ID):
+    anime = db.session.get(Anime, ID)
+    if not anime:
+        return "False"
+    count = EP_list.query.filter_by(anime_id=ID).count()
+    return str(count)
+
+
 @app.route("/save_anime", methods=["POST"])
 def save_anime():
     anime_dict = request.get_json()
-    title = anime_dict.get("title").replace("-", " ").title()
-    anime = Anime(title=title)
-    db.session.add(anime)
-    db.session.commit()
+    anime_id = anime_dict.get("anime_id")
+    anime_url = anime_dict.get("anime_url")
+    if not anime_id:
+        title = anime_dict.get("title").replace("-", " ").title()
+        anime = Anime(title=title, anime_url=anime_url)
+        db.session.add(anime)
+        db.session.commit()
+    else:
+        anime = db.session.get(Anime, anime_id)
+        if not anime:
+            return "No Anime Found to update"
+        anime.anime_url = anime_url
 
     ep_list = anime_dict.get("ep_list")
     for i in ep_list:

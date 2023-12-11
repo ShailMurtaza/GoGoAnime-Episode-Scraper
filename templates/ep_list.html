@@ -10,8 +10,9 @@
 	<div class="iframe_container">
 		<iframe id="download_frame"></iframe>
 	</div>
-	<div>
+	<div id="anime_nav">
 		<button onclick='prev_ep()' class="btn-nav">PREVIOUS</button>
+        <a href="/update_anime/{{anime_id}}" class="btn-nav">UPDATE</a>
 		<button onclick='next_ep()' class="btn-nav" style="float: right;">NEXT</button>
 	</div>
 
@@ -21,6 +22,10 @@
 	const anime_id = {{anime_id}}
 	const all_links = {{ ep_list | tojson }}
 	var ep = null
+
+    function update() {
+        window.location.href = "/update_anime/" + anime_id
+    }
 </script>
 <script src="/static/ep_list.js"></script>
 {% endblock %}

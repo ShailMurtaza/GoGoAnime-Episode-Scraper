@@ -20,13 +20,14 @@ function show_anime(anime_list) {
         anime_div.innerHTML += `
         <div class="row" id="anime_row_${i}">
             <a id="link_${i}" class="btn btn-orange link" href="/get_anime/${i}"><b>${anime_list[i]}</b></a>
-            <button type="button" class="btn btn-primary" onclick="edit_title(${i})"><img src="/static/pencil.webp"></button>
-            <button type="button" class="btn btn-danger" onclick="del_anime(${i})"><img src="/static/trash.webp"></button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="edit_title(${i})"><img src="/static/pencil.webp"></button>
+            <button class="btn btn-sm btn-update" onclick=update(${i})><img src="/static/update.webp"></button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="del_anime(${i})"><img src="/static/trash.webp"></button>
         </div>
         <div class="row edit_title" id="edit_title_row_${i}">
             <input id="input_${i}" type="text" class="btn input-title" placeholder="Title" value="${anime_list[i]}">
-            <button type="button" class="btn btn-primary" onclick="save_title(${i})"><img src="/static/floppy.webp"></button>
-            <button type="button" class="btn btn-danger" onclick="hide_edit_title(${i})"><img src="/static/cancel.webp"></button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="save_title(${i})"><img src="/static/floppy.webp"></button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="hide_edit_title(${i})"><img src="/static/cancel.webp"></button>
         </div>
         `
     }
@@ -90,5 +91,8 @@ async function save_title(ID) {
     }
 }
 
+function update(i) {
+    window.location.href = "/update_anime/" + i
+}
 
 show_anime(full_anime_list) // Show all anime at start

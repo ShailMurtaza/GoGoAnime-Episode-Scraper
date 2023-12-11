@@ -76,32 +76,37 @@ main {
     cursor: not-allowed;
 }
 
-.btn-danger {
+.btn-sm {
     padding: 5px;
     color: white;
-    background-color: rgb(179, 14, 14);
     width: fit-content;
     margin-left: 5px;
     transition-duration: 300ms;
+}
+
+.btn-danger {
+    background-color: rgb(179, 14, 14);
 }
 .btn-danger:hover {
     background-color: red;
 }
 
 .btn-primary {
-    padding: 5px;
-    color: white;
     background-color: rgb(14, 30, 179);
-    width: fit-content;
-    margin-left: 5px;
-    transition-duration: 300ms;
 }
 .btn-primary:hover {
     background-color: rgb(22, 0, 146);
 }
 
+.btn-update {
+    background-color: #004600;
+}
+.btn-update:hover {
+    background-color: #002f00;
+}
+
 .btn > img {
-    width: 25px;
+    width: 20px;
 }
 
 .input {

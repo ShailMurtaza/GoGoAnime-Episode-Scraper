@@ -33,6 +33,12 @@
     border-radius: 1px;
 }
 
+#anime_nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 @media screen and (max-width: 600px) {
     #links_container {
         padding: 0;

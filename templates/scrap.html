@@ -8,9 +8,19 @@
 <main>
     <h1 class="title">Scraping</h1>
     <input type="text" placeholder="Enter URL" class="input" id="url_inp" value="" autofocus="" autocomplete="off">
-    <button type="button" class="btn btn-orange" onclick="scrap()" id="scrap_btn">SCRAP</button>
+    {% if update %}
+    <button type="button" class="btn btn-orange" onclick="update_anime({{anime_id}})" id="scrap_btn">SCRAP</button>
+    {% else %}
+        <button type="button" class="btn btn-orange" onclick="scrap(null, null)" id="scrap_btn">SCRAP</button>
+    {% endif %}
     <button type="button" class="btn btn-orange" onclick="scrap_stop()" id="scrap_stop_btn">STOP</button>
     <p id="output"></p>
 </main>
 <script src="/static/scrap.js"></script>
+{% if update %}
+    <script>
+        url_inp.value = "{{anime_url}}"
+    </script>
+    <script src="/static/update_anime.js"></script>
+{% endif %}
 {% endblock %}
