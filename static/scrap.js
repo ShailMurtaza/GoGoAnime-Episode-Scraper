@@ -14,7 +14,6 @@ async function scrap() {
             return
         }
         scrap_btn.disabled = true // disable scrap button
-        // if input box is not empty
 
         output("FETCHING ...")
         let html = await fetch_data(anime_url) // get HTML data of url using fetch api of server
@@ -50,6 +49,7 @@ async function scrap() {
     } catch (error) {
         output(`<span class="error">Something Went Wrong ...</span>`)
         output(`<span class="error">ERROR: ${error}</span>`)
+        console.error(error)
         scrap_btn.disabled = false // enable scrap button
     }
 }
@@ -58,7 +58,7 @@ async function scrap() {
 async function get_download_list(url_list) {
     try {
         let ep_list = []
-        for(let i=0;i<url_list.length;i++) { // Divide length for fast result. Since it is testing phase
+        for(let i=url_list.length-1;i > -1;i--) {
             let html = await fetch_data(url_list[i])
             let [title, url] = get_download_data(html)
             ep_list.push([title, url])

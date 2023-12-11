@@ -31,7 +31,7 @@ function setEP(num) {
         }
         fetch(`/set_index/${anime_id}/${ep}`).then(r=>{return r.text()}).then(text=>console.log("setEP Result:" , text))
 
-        let episode_index = all_links.length - ep - 1
+        let episode_index = ep
         let current_ep = all_links[episode_index]
         download_frame.src = current_ep[1]
         title.innerText = current_ep[0]
