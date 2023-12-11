@@ -1,9 +1,14 @@
 const url_inp = document.getElementById("url_inp")
 const output_cont = document.getElementById("output")
 const scrap_btn = document.getElementById("scrap_btn")
+const scrap_stop_btn = document.getElementById("scrap_stop_btn")
 const api_url = "https://ajax.gogo-load.com/ajax/load-list-episode" // API of GoGo Anime from where we can fetch ul list of all animes
 const parser = new DOMParser();
+var scrapping = true
 
+// To bypass caching
+scrap_btn.disabled = false // enable scrap button
+scrap_stop_btn.disabled = true // disable scraping stop button
 
 async function scrap() {
     try {
@@ -14,6 +19,7 @@ async function scrap() {
             return
         }
         scrap_btn.disabled = true // disable scrap button
+        scrap_stop_btn.disabled = false // enable scraping stop button
 
         output("FETCHING ...")
         let html = await fetch_data(anime_url) // get HTML data of url using fetch api of server
@@ -45,20 +51,20 @@ async function scrap() {
         else {
             throw "False Output"
         }
-        scrap_btn.disabled = false // enable scrap button
     } catch (error) {
         output(`<span class="error">Something Went Wrong ...</span>`)
         output(`<span class="error">ERROR: ${error}</span>`)
         console.error(error)
-        scrap_btn.disabled = false // enable scrap button
     }
+    scrap_btn.disabled = false // enable scrap button
+    scrap_stop_btn.disabled = true // disable scraping stop button
 }
 
 
 async function get_download_list(url_list) {
     try {
         let ep_list = []
-        for(let i=url_list.length-1;i > -1;i--) {
+        for(let i=url_list.length-1;i > -1 && scrapping;i--) {
             let html = await fetch_data(url_list[i])
             let [title, url] = get_download_data(html)
             ep_list.push([title, url])
@@ -149,6 +155,11 @@ async function save_anime(title, ep_list) {
         console.error("ERROR: ", error)
         throw error
     }
+}
+
+
+function scrap_stop() {
+    scrapping = false
 }
 
 
