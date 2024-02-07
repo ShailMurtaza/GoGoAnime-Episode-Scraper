@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import Flask, request, render_template, abort, redirect
-from flask_sqlalchemy import SQLAlchemy
+from database import Database
 import requests
 from base64 import b64decode
 import logging
@@ -10,49 +10,30 @@ from to_dict import anime_to_dict, ep_to_dict
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 app = Flask(__name__)
+app.config["database"] = "instance/database.db"
+database = Database(app.config.get("database"))
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
-app.app_context().push()
-
-
-class Anime(db.Model):
-    __tablename__ = "Anime"
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text, nullable=False)
-    anime_url = db.Column(db.Text, nullable=False)
-    path = db.Column(db.Text, nullable=True)
-    index = db.Column(db.Integer, default=0)
-
-class EP_list(db.Model):
-    __tablename__ = "EP_list"
-    id = db.Column(db.Integer, primary_key=True)
-    anime_id = db.Column(db.Integer, nullable=False)
-    title = db.Column(db.Text, nullable=False)
-    url = db.Column(db.Text, nullable=False)
 
 
 @app.route("/")
 def index():
-    anime = Anime.query.all()
+    anime = database.anime_all()
     anime = anime_to_dict(anime)
     return render_template("anime.html", anime=anime)
 
-
 @app.route("/get_anime/<int:ID>")
 def get_anime(ID):
-    anime = db.session.get(Anime, ID)
+    anime = database.is_anime(ID)
     if anime:
-        ep_list = EP_list.query.filter_by(anime_id=ID)
+        ep_list = database.anime_ep_list(ID)
         ep_list = ep_to_dict(ep_list)
-        return render_template("ep_list.html", anime_id=anime.id, ep_list=ep_list)
+        return render_template("ep_list.html", anime_id=ID, ep_list=ep_list)
     return redirect("/")
 
 
 @app.route("/get_index/<int:ID>")
 def get_anime_index(ID):
-    anime = db.session.get(Anime, ID)
+    anime = database.is_anime(ID)
     if anime:
         return str(anime.index)
     return "False"
@@ -60,15 +41,16 @@ def get_anime_index(ID):
 
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
-    anime = db.session.get(Anime, ID)
-    ep_num = EP_list.query.filter_by(anime_id=ID).count()
-    if anime and ep_num >= 0 and ep_num > index:
-        anime.index = index
-        db.session.commit()
-        return "True"
+    anime = database.is_anime(ID)
+    if anime:
+        ep_num = database.ep_list_count(ID)
+        if ep_num >= 0 and ep_num > index:
+            database.set_anime_index(ID, index)
+            return "True"
     return "False"
 
 
+"""
 @app.route("/scrap")
 def scrap():
     return render_template("scrap.html")
@@ -152,7 +134,7 @@ def fetch(url):
     except Exception as err:
         print(err)
         return "False"
-
+"""
 
 if __name__ == "__main__":
     HOST = "0.0.0.0"
