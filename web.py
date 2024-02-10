@@ -107,19 +107,17 @@ def del_anime(ID):
     return redirect("/")
 
 
-"""
 @app.route("/edit_title/<int:ID>", methods=["POST"])
 def edit_title(ID):
     title = request.get_json().get("title")
-    anime = db.session.get(Anime, ID)
+    anime = database.get_anime(ID)
     if anime and title:
-        anime.title = title.title()
-        db.session.commit()
+        anime.title = title
+        database.update_anime(anime)
         return str(anime.title)
     return "False"
 
 
-"""
 @app.route("/fetch/<url>")
 def fetch(url):
     try:
