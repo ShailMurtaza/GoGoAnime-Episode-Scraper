@@ -35,6 +35,11 @@ class Database():
         self.commit()
         return anime
     
+    def delete_anime(self, ID):
+        self.query(f"DELETE FROM Anime WHERE id='{ID}'")
+        self.query(f"DELETE from EP_list WHERE anime_id='{ID}'")
+        self.commit()
+    
     def anime_ep_list(self, ID):
         data = self.query(f"SELECT * FROM EP_list WHERE anime_id={ID}").fetchall()
         ep_list = []

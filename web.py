@@ -99,19 +99,15 @@ def save_anime():
     return "True"
 
 
-"""
 @app.route("/del_anime/<int:ID>")
 def del_anime(ID):
-    anime = db.session.get(Anime, ID)
+    anime = database.get_anime(ID)
     if anime:
-        ep_list = EP_list.query.filter_by(anime_id=ID)
-        db.session.delete(anime)
-        for i in ep_list:
-            db.session.delete(i)
-        db.session.commit()
+        database.delete_anime(ID)
     return redirect("/")
 
 
+"""
 @app.route("/edit_title/<int:ID>", methods=["POST"])
 def edit_title(ID):
     title = request.get_json().get("title")
