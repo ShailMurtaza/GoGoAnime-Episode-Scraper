@@ -17,25 +17,33 @@ class Database():
         anime_list = []
         for i in data:
             anime_list.append(Anime(i))
-        print(anime_list)
         return anime_list
     
-    def is_anime(self, ID):
+    def get_anime(self, ID):
         anime = self.query(f"SELECT * FROM Anime WHERE id={ID}").fetchone()
         if not anime:
             return None
         return Anime(anime)
-    
-    def set_anime_index(self, ID, index):
-        self.query(f"UPDATE Anime SET 'index'={index} where id={ID}")
+
+    def update_anime(self, anime):
+        self.query(f"UPDATE Anime SET 'title'='{anime.title}', 'anime_url'='{anime.anime_url}', 'path'='{anime.path}', 'index'='{anime.index}' WHERE id='{anime.id}'")
         self.commit()
 
+    def insert_anime(self, anime):
+        result = self.query(f"INSERT INTO Anime ('title', 'anime_url', 'path', 'index') VALUES ('{anime.title}', '{anime.anime_url}', '{anime.path}', '{anime.index}') RETURNING id;")
+        anime.id = result.fetchone()[0]
+        self.commit()
+        return anime
+    
     def anime_ep_list(self, ID):
         data = self.query(f"SELECT * FROM EP_list WHERE anime_id={ID}").fetchall()
         ep_list = []
         for i in data:
             ep_list.append(EP_list(i))
         return ep_list
+
+    def insert_episode(self, episode):
+        self.query(f"INSERT INTO EP_list ('anime_id', 'title', 'url') VALUES ('{episode.anime_id}', '{episode.title}', '{episode.url}');")
 
     def ep_list_count(self, ID):
         data = self.query(f"SELECT COUNT(*) FROM EP_list WHERE anime_id={ID}").fetchone()

@@ -156,7 +156,7 @@ async function save_anime(title, ep_list, anime_url, anime_id) {
         const response = await fetch("/save_anime", {
             "method": "POST",
             "headers": {"Content-Type": "application/json"},
-            "body": JSON.stringify({"title": title, "ep_list": ep_list, "anime_url": anime_url, anime_id})
+            "body": JSON.stringify({"title": title, "ep_list": ep_list, "anime_url": anime_url, 'anime_id': anime_id})
         })
 
         if (!response.ok) {

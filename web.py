@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import Flask, request, render_template, abort, redirect
-from database import Database
+from database import Database, Anime, EP_list
 import requests
 from base64 import b64decode
 import logging
@@ -21,9 +21,10 @@ def index():
     anime = anime_to_dict(anime)
     return render_template("anime.html", anime=anime)
 
+
 @app.route("/get_anime/<int:ID>")
 def get_anime(ID):
-    anime = database.is_anime(ID)
+    anime = database.get_anime(ID)
     if anime:
         ep_list = database.anime_ep_list(ID)
         ep_list = ep_to_dict(ep_list)
@@ -33,7 +34,7 @@ def get_anime(ID):
 
 @app.route("/get_index/<int:ID>")
 def get_anime_index(ID):
-    anime = database.is_anime(ID)
+    anime = database.get_anime(ID)
     if anime:
         return str(anime.index)
     return "False"
@@ -41,16 +42,16 @@ def get_anime_index(ID):
 
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
-    anime = database.is_anime(ID)
+    anime = database.get_anime(ID)
     if anime:
         ep_num = database.ep_list_count(ID)
         if ep_num >= 0 and ep_num > index:
-            database.set_anime_index(ID, index)
+            anime.index = index
+            database.update_anime(anime)
             return "True"
     return "False"
 
 
-"""
 @app.route("/scrap")
 def scrap():
     return render_template("scrap.html")
@@ -58,7 +59,7 @@ def scrap():
 
 @app.route("/update_anime/<int:ID>")
 def update_anime(ID):
-    anime = db.session.get(Anime, ID)
+    anime = database.get_anime(ID)
     if not anime:
         return redirect("/")
     return render_template("scrap.html", anime_id=anime.id, anime_url=anime.anime_url, update=True)
@@ -66,10 +67,10 @@ def update_anime(ID):
 
 @app.route("/anime_count/<int:ID>")
 def anime_count(ID):
-    anime = db.session.get(Anime, ID)
+    anime = database.get_anime(ID)
     if not anime:
         return "False"
-    count = EP_list.query.filter_by(anime_id=ID).count()
+    count = database.ep_list_count(ID)
     return str(count)
 
 
@@ -79,12 +80,11 @@ def save_anime():
     anime_id = anime_dict.get("anime_id")
     anime_url = anime_dict.get("anime_url")
     if not anime_id:
-        title = anime_dict.get("title").replace("-", " ").title()
-        anime = Anime(title=title, anime_url=anime_url)
-        db.session.add(anime)
-        db.session.commit()
+        title = anime_dict.get("title").replace("-", " ")
+        anime = Anime((None, title, anime_url, None, 0))
+        anime = database.insert_anime(anime)
     else:
-        anime = db.session.get(Anime, anime_id)
+        anime = database.get_anime(anime_id)
         if not anime:
             return "No Anime Found to update"
         anime.anime_url = anime_url
@@ -93,13 +93,13 @@ def save_anime():
     for i in ep_list:
         ep_title = i[0]
         ep_url = i[1]
-        episode = EP_list(anime_id=anime.id, title=ep_title, url=ep_url)
-        db.session.add(episode)
-    db.session.commit()
-    
+        episode = EP_list((None, anime.id, ep_title, ep_url))
+        database.insert_episode(episode)
+    database.commit()
     return "True"
 
 
+"""
 @app.route("/del_anime/<int:ID>")
 def del_anime(ID):
     anime = db.session.get(Anime, ID)
@@ -123,6 +123,7 @@ def edit_title(ID):
     return "False"
 
 
+"""
 @app.route("/fetch/<url>")
 def fetch(url):
     try:
@@ -134,7 +135,7 @@ def fetch(url):
     except Exception as err:
         print(err)
         return "False"
-"""
+
 
 if __name__ == "__main__":
     HOST = "0.0.0.0"
