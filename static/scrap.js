@@ -2,7 +2,7 @@ const url_inp = document.getElementById("url_inp")
 const output_cont = document.getElementById("output")
 const scrap_btn = document.getElementById("scrap_btn")
 const scrap_stop_btn = document.getElementById("scrap_stop_btn")
-const api_url = "https://ajax.gogo-load.com/ajax/load-list-episode" // API of GoGo Anime from where we can fetch ul list of all animes
+const api_url = "https://ajax.gogocdn.net/ajax/load-list-episode" // API of GoGo Anime from where we can fetch ul list of all animes
 const parser = new DOMParser();
 var scrapping = true // Set scrappnig as True at start
 

@@ -126,7 +126,7 @@ def edit_title(ID):
     return "False"
 
 
-@app.route("/fetch/<url>")
+@app.route("/fetch/<path:url>")
 def fetch(url):
     try:
         url = b64decode(url).decode()
