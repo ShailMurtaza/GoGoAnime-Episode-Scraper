@@ -7,7 +7,7 @@ function search() {
     let anime_list = {}
     for (const i in full_anime_list) {
         let title = full_anime_list[i].toLowerCase()
-        if (title.includes(word)) anime_list[i] = title
+        if (title.includes(word)) anime_list[i] = full_anime_list[i]
     }
     show_anime(anime_list)
 }
@@ -82,6 +82,7 @@ async function save_title(ID) {
             else {
                 link.innerHTML = `<b>${data}</b>`
                 title_inp.value = data
+                full_anime_list[ID] = data
             }
             hide_edit_title(ID)
         } catch(error) {
