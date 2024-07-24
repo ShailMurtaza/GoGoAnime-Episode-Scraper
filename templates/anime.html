@@ -1,13 +1,29 @@
-{% extends 'layout.html' %}
-{% block title %}Anime List{% endblock %}
-{% block body %}
-<main>
-    <h1 class="title">Anime List</h1>
-    <input type="text" class="input" onkeyup="search()" placeholder="Search" id="search" autofocus="" autocomplete="off">
-    <div id="anime_list"></div>
-</main>
-<script>
-    const full_anime_list = {{anime | tojson}}
-</script>
-<script src="/static/anime.js"></script>
-{% endblock %}
+<!-- 
+    CREATED BY SHAIL MURTAZA
+    https://github.com/ShailMurtaza
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anime List</title>
+        <link rel="shortcut icon" href="/static/favicon.webp" type="image/x-icon">
+        <link rel="stylesheet" href="/static/main.css">
+    </head>
+    <body>
+        <nav>
+            <a class="nav-btn" href="/">ANIME LIST</a>
+            <a class="nav-btn" href="/scrap">SCRAPING</a>
+        </nav>
+        <h1 class="title">Anime List</h1>
+        <main id="main">
+            <input type="text" class="input" onkeyup="search()" placeholder="Search" id="search" autofocus="" autocomplete="off">
+            <div id="anime_list"></div>
+        </main>
+
+        <script src="/static/mithril.min.js"></script>
+        <script src="/static/app.js"></script>
+
+    </body>
+</html>
