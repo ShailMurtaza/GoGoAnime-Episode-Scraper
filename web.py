@@ -61,11 +61,6 @@ def set_anime_index(ID, index):
     return "False"
 
 
-@app.route("/scrap")
-def scrap():
-    return render_template("scrap.html")
-
-
 @app.route("/update_anime/<int:ID>")
 def update_anime(ID):
     anime = database.get_anime(ID)

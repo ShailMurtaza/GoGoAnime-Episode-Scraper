@@ -76,15 +76,15 @@ var AnimeRow = {
                 m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {
                     vnodes.attrs.edit_title(vnodes.attrs.id)
                 }},
-                    m("img", {src: "/static/pencil.webp"})
+                    m("img", {src: "/static/img/pencil.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-update", onclick: "update(${i})"},
-                    m("img", {src: "/static/update.webp"})
+                    m("img", {src: "/static/img/update.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: ()=> {
                     vnodes.attrs.delete(vnodes.attrs.id)
                 }},
-                    m("img", {src: "/static/trash.webp"})
+                    m("img", {src: "/static/img/trash.webp"})
                 )
             ]
         )
@@ -104,10 +104,10 @@ var EditAnime = {
                 m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {
                     vnodes.attrs.save_title(vnodes.attrs.id, vnodes.state.value)
                 }}, 
-                    m("img", {src: "/static/floppy.webp"})
+                    m("img", {src: "/static/img/floppy.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: vnodes.attrs.cancel_edit}, 
-                    m("img", {src: "/static/cancel.webp"})
+                    m("img", {src: "/static/img/cancel.webp"})
                 )
             ]
         )
