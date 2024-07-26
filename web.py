@@ -114,9 +114,11 @@ def save_anime():
 @app.route("/del_anime/<int:ID>")
 def del_anime(ID):
     anime = database.get_anime(ID)
+    result = False
     if anime:
         database.delete_anime(ID)
-    return redirect("/")
+        result = ID
+    return jsonify({"result": result})
 
 
 # Update title of anime
@@ -128,7 +130,7 @@ def edit_title(ID):
         anime.title = title
         database.update_anime(anime)
         return jsonify({"result": anime.title})
-    return jsonify({"result": "False"})
+    return jsonify({"result": False})
 
 
 @app.route("/fetch/<path:url>")

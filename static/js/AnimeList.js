@@ -9,7 +9,7 @@ var AnimeList = {
                 Object.keys(AnimeList.anime_list).map((key)=> {
                     return AnimeList.edit_key === key ?
                         m(EditAnime, {id: key, title: AnimeList.anime_list[key], cancel_edit: AnimeList.cancel_edit, save_title: AnimeList.save_title}):
-                        m(AnimeRow, {id: key, title: AnimeList.anime_list[key], edit_title: AnimeList.edit_title})
+                        m(AnimeRow, {id: key, title: AnimeList.anime_list[key], edit_title: AnimeList.edit_title, delete: AnimeList.delete})
                 })
             )
         ]
@@ -35,9 +35,23 @@ var AnimeList = {
             body: {title: title}
         }).then((result)=> {
             var result = result.result
-            if (result == "False") alert("Anime Not Found")
+            if (result == false) alert("Anime Not Found")
             else AnimeList.anime_list[id] = result
             AnimeList.edit_key = null
+        })
+    },
+    delete(id) {
+        var ans = confirm(`You Sure you want to delete ANIME: ${AnimeList.anime_list[id]}`)
+        if (!ans) return
+        m.request({
+            method: "GET",
+            url: `/del_anime/${id}`
+        }).then((result)=> {
+            var result = result.result
+            if (result == false) alert("Anime Not Found")
+            else {
+                delete AnimeList.anime_list[result]
+            }
         })
     }
 }
@@ -57,7 +71,9 @@ var AnimeRow = {
                 m("button", {class: "btn btn-sm btn-update", onclick: "update(${i})"},
                     m("img", {src: "/static/update.webp"})
                 ),
-                m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: "del_anime(${i})"},
+                m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: ()=> {
+                    vnodes.attrs.delete(vnodes.attrs.id)
+                }},
                     m("img", {src: "/static/trash.webp"})
                 )
             ]
