@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, request, render_template, abort, redirect
+from flask import Flask, request, render_template, abort, redirect, jsonify
 from database import Database, Anime, Episode
 import requests
 from base64 import b64decode
@@ -17,9 +17,14 @@ database = Database(app.config.get("database"))
 
 @app.route("/")
 def index():
+    return render_template("anime.html")
+
+
+@app.route("/get_anime_list")
+def get_anime_list():
     anime = database.anime_all() # List of all anime
     anime = anime_to_dict(anime)
-    return render_template("anime.html", anime=anime)
+    return jsonify(anime)
 
 
 # get specific anime with its episode list

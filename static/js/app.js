@@ -1,5 +1,5 @@
 const root = document.body
-// m.route.prefix = "#"
+m.route.prefix = ""
 
 var Layout = {
     view: (vnode)=> {
@@ -12,6 +12,9 @@ var Layout = {
                     "SCRAPING"
                 )
             ]),
+            m("h1", {"class":"title"},
+                vnode.attrs.title
+            ),
             m("main", vnode.children)
         ]
     }
@@ -20,7 +23,7 @@ var Layout = {
 m.route(root, "/", {
     "/": {
         render: ()=> {
-            return m(Layout, m("h1", "Anime List"))
+            return m(Layout, {"title": "Anime List"}, m(AnimeList))
         }
     },
     "/scrap": {
