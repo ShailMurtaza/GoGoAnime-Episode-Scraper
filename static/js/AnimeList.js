@@ -1,16 +1,15 @@
 var AnimeList = {
     anime_list: {},
     edit_key: null,
+    search: "",
     oninit: ()=> {AnimeList.fetch_anime_list()},
     view: ()=> {
         return [
-            m("input", {class: "input", type:"text", placeholder:"Search", autofocus:"autofocus", autocomplete:"off"}),
+            m("input", {class: "input", type:"text", placeholder:"Search", autofocus:"autofocus", autocomplete:"off", oninput: (e)=> {
+                AnimeList.search = e.target.value
+            }}),
             m("div", {"id":"anime_list"},
-                Object.keys(AnimeList.anime_list).map((key)=> {
-                    return AnimeList.edit_key === key ?
-                        m(EditAnime, {id: key, title: AnimeList.anime_list[key], cancel_edit: AnimeList.cancel_edit, save_title: AnimeList.save_title}):
-                        m(AnimeRow, {id: key, title: AnimeList.anime_list[key], edit_title: AnimeList.edit_title, delete: AnimeList.delete})
-                })
+                AnimeList.gen_list()
             )
         ]
     },
@@ -20,6 +19,17 @@ var AnimeList = {
             url: "/get_anime_list",
         }).then((result)=> {
             AnimeList.anime_list = result
+        })
+    },
+    gen_list: ()=> {
+        const word = AnimeList.search.trim().toLowerCase() // Get search keyword
+        return Object.keys(AnimeList.anime_list).map((key)=> {
+            let title = AnimeList.anime_list[key]
+            // If word is substring of title only then create new anime row
+            if (title.toLowerCase().includes(word))
+                return AnimeList.edit_key === key ?
+                    m(EditAnime, {id: key, title: title, cancel_edit: AnimeList.cancel_edit, save_title: AnimeList.save_title}):
+                    m(AnimeRow, {id: key, title: title, edit_title: AnimeList.edit_title, delete: AnimeList.delete})
         })
     },
     edit_title: (id)=> {
