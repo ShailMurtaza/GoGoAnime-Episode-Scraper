@@ -127,8 +127,8 @@ def edit_title(ID):
     if anime and title:
         anime.title = title
         database.update_anime(anime)
-        return str(anime.title)
-    return "False"
+        return jsonify({"result": anime.title})
+    return jsonify({"result": "False"})
 
 
 @app.route("/fetch/<path:url>")

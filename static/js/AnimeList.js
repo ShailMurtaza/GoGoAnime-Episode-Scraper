@@ -1,7 +1,20 @@
 var AnimeList = {
     anime_list: {},
     edit_key: null,
-    oninit: ()=> {
+    oninit: ()=> {AnimeList.fetch_anime_list()},
+    view: ()=> {
+        return [
+            m("input", {class: "input", type:"text", placeholder:"Search", autofocus:"autofocus", autocomplete:"off"}),
+            m("div", {"id":"anime_list"},
+                Object.keys(AnimeList.anime_list).map((key)=> {
+                    return AnimeList.edit_key === key ?
+                        m(EditAnime, {id: key, title: AnimeList.anime_list[key], cancel_edit: AnimeList.cancel_edit, save_title: AnimeList.save_title}):
+                        m(AnimeRow, {id: key, title: AnimeList.anime_list[key], edit_title: AnimeList.edit_title})
+                })
+            )
+        ]
+    },
+    fetch_anime_list: ()=> {
         m.request({
             method: "GET",
             url: "/get_anime_list",
@@ -9,23 +22,23 @@ var AnimeList = {
             AnimeList.anime_list = result
         })
     },
-    view: ()=> {
-        return [
-            m("input", {class: "input", type:"text", placeholder:"Search", autofocus:"autofocus", autocomplete:"off"}),
-            m("div", {"id":"anime_list"},
-                Object.keys(AnimeList.anime_list).map((key)=> {
-                    return AnimeList.edit_key === key ?
-                        m(EditAnime, {id: key, title: AnimeList.anime_list[key], cancel_edit: AnimeList.cancel_edit}):
-                        m(AnimeRow, {id: key, title: AnimeList.anime_list[key], edit_title: AnimeList.edit_title})
-                })
-            )
-        ]
-    },
-    edit_title(id) {
+    edit_title: (id)=> {
         AnimeList.edit_key = id
     },
-    cancel_edit() {
+    cancel_edit: ()=> {
         AnimeList.edit_key = null
+    },
+    save_title: (id, title)=> {
+        m.request({
+            method: "POST",
+            url: "/edit_title/" + id,
+            body: {title: title}
+        }).then((result)=> {
+            var result = result.result
+            if (result == "False") alert("Anime Not Found")
+            else AnimeList.anime_list[id] = result
+            AnimeList.edit_key = null
+        })
     }
 }
 
@@ -53,11 +66,18 @@ var AnimeRow = {
 }
 
 var EditAnime = {
+    oninit: (vnodes)=> {
+        vnodes.state.value = vnodes.attrs.title
+    },
     view: (vnodes)=> {
         return m("div", {class: "row"},
             [
-                m("input", {class: "btn input-title", type: "text", placeholder: "Title", value: vnodes.attrs.title}),
-                m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: "save_title(${i})"}, 
+                m("input", {class: "btn input-title", type: "text", placeholder: "Title", value: vnodes.state.value, oninput: (e)=> {
+                    vnodes.state.value = e.target.value
+                }}),
+                m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {
+                    vnodes.attrs.save_title(vnodes.attrs.id, vnodes.state.value)
+                }}, 
                     m("img", {src: "/static/floppy.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: vnodes.attrs.cancel_edit}, 
