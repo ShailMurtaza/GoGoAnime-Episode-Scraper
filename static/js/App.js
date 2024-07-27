@@ -5,14 +5,14 @@ var Layout = {
     view: (vnode)=> {
         return [
             m("nav", [
-                m(m.route.Link, {"class":"nav-btn","href":"/"},
+                m(m.route.Link, {class: "nav-btn", href: "/"},
                     "ANIME LIST"
                 ),
-                m(m.route.Link, {"class":"nav-btn","href":"/scrap"},
+                m(m.route.Link, {class: "nav-btn", href: "/scrap"},
                     "SCRAPING"
                 )
             ]),
-            m("h1", {"class":"title"},
+            m("h1", {class:"title"},
                 vnode.attrs.title
             ),
             m("main", vnode.children)

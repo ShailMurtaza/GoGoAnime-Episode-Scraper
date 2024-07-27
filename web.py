@@ -2,7 +2,6 @@
 from flask import Flask, request, render_template, abort, redirect, jsonify
 from database import Database, Anime, Episode
 import requests
-from base64 import b64decode
 import logging
 from to_dict import anime_to_dict, ep_to_dict
 
@@ -128,17 +127,18 @@ def edit_title(ID):
     return jsonify({"result": False})
 
 
-@app.route("/fetch/<path:url>")
-def fetch(url):
+@app.route("/fetch", methods=["POST"])
+def fetch():
+    result = False
     try:
-        url = b64decode(url).decode()
+        url = request.get_json().get("url")
         r = requests.get(url)
-        if r.status_code == 404:
-            return abort(404)
-        return r.content
+        if r.status_code != 200:
+            return abort(r.status_code)
+        result = r.content.decode()
     except Exception as err:
         print(err)
-        return "False"
+    return jsonify({"result": result})
 
 
 if __name__ == "__main__":
