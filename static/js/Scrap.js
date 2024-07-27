@@ -2,6 +2,8 @@ const api_url = "https://ajax.gogocdn.net/ajax/load-list-episode" // API of GoGo
 const parser = new DOMParser();
 
 var Scrap = {
+    anime_id: null,
+    ep_start: null,
     scraping: true,
     input: "https://anitaku.pe/cardfight-vanguard-divinez-season-2-episode-4",
     // input: "https://wombo.jonmoasldf/monster-dub-episode-1",
@@ -63,7 +65,11 @@ var Scrap = {
             output("Fetching Download List ...")
             let ep_list = await Scrap.get_download_list(url_list)
             output("Done Fetching Download List ...")
-            console.log(ep_list)
+            output(m("b", `Fetched: ${ep_list.length} Episodes`))
+            output("Saving data in database ...")
+            result = await Scrap.save_anime(alias, ep_list, anime_url)
+            if (result) output(m("b", "Data Saved Successfully ..."))
+            else throw `Output: ${result}`
         } catch (error) {
             output(m("span.error", "Something Went Wrong"))
             output(m("span.error", `ERROR: ${error}`))
@@ -77,7 +83,8 @@ var Scrap = {
         Scrap.scraping = true
     },
     // Return full API URL for given anime data. It will content of that URL html will contain <ul> with <li> and <a>. Every episode link will be separated by different <a> tag
-    gen_url: (html, ep_start=null)=> {
+    gen_url: (html)=> {
+        let ep_start = Scrap.ep_start
         let htmlDoc = Scrap.HTML(html) // Parse HTML
         // get all parameters to generate URL of GoGo Anime API
         let episode_page = htmlDoc.getElementById("episode_page")
@@ -138,6 +145,22 @@ var Scrap = {
         let title = htmlDoc.querySelector(".title_name > h2").innerHTML
         let link = htmlDoc.querySelector(".dowloads > a").getAttribute("href")
         return [title, link]
+    },
+
+    save_anime: async (title, ep_list, anime_url)=> {
+        let anime_id = Scrap.anime_id
+        return m.request({
+            method: "POST",
+            url: "/save_anime",
+            body: {
+                title: title,
+                ep_list: ep_list,
+                anime_url: anime_url,
+                anime_id: anime_id
+            }
+        }).then((result)=> {
+            return result.result
+        })
     },
 
     // Prase string as HTML DOM

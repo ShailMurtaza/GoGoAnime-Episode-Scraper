@@ -91,7 +91,7 @@ def save_anime():
     else:
         anime = database.get_anime(anime_id)
         if not anime:
-            return "No Anime Found to update"
+            return jsonify({"result": "No Anime Found to update"})
         anime.anime_url = anime_url
 
     ep_list = anime_dict.get("ep_list")
@@ -101,7 +101,7 @@ def save_anime():
         episode = Episode((None, anime.id, ep_title, ep_url))
         database.insert_episode(episode)
     database.commit()
-    return "True"
+    return jsonify({"result": True})
 
 
 # Delete anime with its episodes
