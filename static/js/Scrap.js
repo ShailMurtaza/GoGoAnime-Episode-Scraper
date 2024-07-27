@@ -3,7 +3,7 @@ const parser = new DOMParser();
 
 var Scrap = {
     scraping: true,
-    input: "https://anitaku.pe/monster-dub-episode-1",
+    input: "https://anitaku.pe/cardfight-vanguard-divinez-season-2-episode-4",
     // input: "https://wombo.jonmoasldf/monster-dub-episode-1",
     output_data: [],
     scrap_btn_disabled: false, // enable scrap button
@@ -32,7 +32,7 @@ var Scrap = {
                 disabled: Scrap.stop_btn_disabled,
                 onclick: "scrap_stop()",
             }, "STOP"), 
-            m("p", Scrap.output_data.map((data)=> {
+            m("p#output", Scrap.output_data.map((data)=> {
                 return data
             }))
         ]
@@ -42,10 +42,7 @@ var Scrap = {
         try {
             output("") // Clear Output
             const anime_url = Scrap.input.trim() // Get inputbox URL
-            if (!anime_url) {
-                output("Enter Url")
-                return
-            }
+            if (!anime_url) throw "Enter Url"
 
             output("Fetching ...")
             let result = await Scrap.fetch_data(anime_url) // get HTML data of url using fetch api of server
@@ -53,16 +50,18 @@ var Scrap = {
             output("Fetched ...")
             result = Scrap.gen_url(result) // generate full GoGo Anime URL to fetch links of all episodes
             if (!result) throw "Nothing new to fetch"
-            const full_api_url = result[0]
-            const alias = result[1]
+            const [full_api_url, alias] = result
             output(`ALIAS: ${alias}`)
             output(`URL: ${full_api_url}`)
 
             result = await Scrap.fetch_data(full_api_url) // get HTML data of url using fetch api of server
             if (!result) throw "False Output"
-            else if (result == "") throw "API URL response is empty. I guess something wrong with GoGoAnime 🤷‍♂️"
+            else if (result == "") throw "API URL response is empty. I guess something wrong with GoGoAnime 🤷"
             let url_list = Scrap.get_url_list(result, anime_url)
-            console.log(url_list)
+            output("Fetching Download List ...")
+            let ep_list = await Scrap.get_download_list(url_list)
+            output("Done Fetching Download List ...")
+            console.log(ep_list)
         } catch (error) {
             output(m("span.error", "Something Went Wrong"))
             output(m("span.error", `ERROR: ${error}`))
@@ -91,6 +90,7 @@ var Scrap = {
         let url = `${api_url}?ep_start=${ep_start}&ep_end=${ep_end}&id=${anime_id}&default_ep=${default_ep}&alias=${alias}`
         return [url, alias]
     },
+
     // data will have <ul> tag with <li> and within <li> there will be <a href="one episode URL">
     get_url_list: (data, anime_url)=> {
         let htmlDoc = Scrap.HTML(data) // Parse HTML
@@ -105,15 +105,44 @@ var Scrap = {
         }
         return url_list
     },
+
+    get_download_list: async (url_list)=> {
+        try {
+            let ep_list = []
+            console.log(url_list.length)
+            for(let i=url_list.length-1;i > -1 && Scrap.scraping;i--) {
+                let html = await Scrap.fetch_data(url_list[i])
+                let [title, url] = Scrap.get_download_data(html)
+                ep_list.push([title, url])
+                Scrap.output(title)
+            }
+            return ep_list
+        }
+        catch (err) {
+            throw err
+        }
+    },
+
+    // Return title of current episode with download link
+    get_download_data: (data)=> {
+        let htmlDoc = Scrap.HTML(data) // Parse HTML
+
+        let title = htmlDoc.querySelector(".title_name > h2").innerHTML
+        let link = htmlDoc.querySelector(".dowloads > a").getAttribute("href")
+        return [title, link]
+    },
+
     // Prase string as HTML DOM
     HTML: (string)=> {
         let htmlDoc = parser.parseFromString(string, "text/html") // Parse HTML
         return htmlDoc
     },
+
     output: (data)=> {
         if (data) Scrap.output_data.push(data, m("br"))
         else Scrap.output_data = []
     },
+
     fetch_data: (url)=> {
         return m.request({
             method: "POST",
