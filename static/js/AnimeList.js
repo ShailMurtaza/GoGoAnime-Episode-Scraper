@@ -78,7 +78,11 @@ var AnimeRow = {
                 }},
                     m("img", {src: "/static/img/pencil.webp"})
                 ),
-                m("button", {class: "btn btn-sm btn-update", onclick: "update(${i})"},
+                m(m.route.Link, {
+                    href: `/update/${vnodes.attrs.id}`,
+                    selector: "button",
+                    class: "btn btn-sm btn-update",
+                },
                     m("img", {src: "/static/img/update.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: ()=> {

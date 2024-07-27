@@ -28,7 +28,12 @@ m.route(root, "/", {
     },
     "/scrap": {
         render: ()=> {
-            return m(Layout, {title: "Scraping"}, m(Scrap))
+            return m(Layout, {title: "Scraping"}, m(Scrap, {ID: null}))
+        }
+    },
+    "/update/:ID": {
+        render: (vnode)=> {
+            return m(Layout, {title: "Update Anime"}, m(Scrap, {ID: vnode.attrs.ID}))
         }
     }
 })

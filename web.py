@@ -60,22 +60,32 @@ def set_anime_index(ID, index):
     return "False"
 
 
-@app.route("/update_anime/<int:ID>")
-def update_anime(ID):
+# @app.route("/update_anime/<int:ID>")
+# def update_anime(ID):
+#     anime = database.get_anime(ID)
+#     if not anime:
+#         return redirect("/")
+#     return render_template("scrap.html", anime_id=anime.id, anime_url=anime.anime_url, update=True)
+
+
+@app.route("/anime_data/<int:ID>")
+def anime_data(ID):
     anime = database.get_anime(ID)
     if not anime:
-        return redirect("/")
-    return render_template("scrap.html", anime_id=anime.id, anime_url=anime.anime_url, update=True)
+        return abort(404)
+
+    count = database.episodes_count(ID)
+    return jsonify({"url": anime.anime_url, "count": count})
 
 
 # Return number of episodes of anime
-@app.route("/anime_count/<int:ID>")
-def anime_count(ID):
-    anime = database.get_anime(ID)
-    if not anime:
-        return "False"
-    count = database.episodes_count(ID)
-    return str(count)
+# @app.route("/anime_count/<int:ID>")
+# def anime_count(ID):
+#     anime = database.get_anime(ID)
+#     if not anime:
+#         return "False"
+#     count = database.episodes_count(ID)
+#     return str(count)
 
 
 # save new anime, or update list of episode if anime already exist

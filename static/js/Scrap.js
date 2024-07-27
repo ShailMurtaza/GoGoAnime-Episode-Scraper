@@ -5,8 +5,7 @@ var Scrap = {
     anime_id: null,
     ep_start: null,
     scraping: true,
-    input: "https://anitaku.pe/cardfight-vanguard-divinez-season-2-episode-4",
-    // input: "https://wombo.jonmoasldf/monster-dub-episode-1",
+    input: "",
     output_data: [],
     scrap_btn_disabled: false, // enable scrap button
     stop_btn_disabled: true, // disable scraping stop button
@@ -124,7 +123,6 @@ var Scrap = {
     get_download_list: async (url_list)=> {
         try {
             let ep_list = []
-            console.log(url_list.length)
             for(let i=url_list.length-1;i > -1 && Scrap.scraping;i--) {
                 let html = await Scrap.fetch_data(url_list[i])
                 let [title, url] = Scrap.get_download_data(html)
@@ -187,5 +185,39 @@ var Scrap = {
         }).then((result)=> {
             return result.result
         })
+    },
+
+    // Get URL and episode count. This function is only for Update Anime
+    fetch_anime_data: (ID)=> {
+        return m.request({
+            method: "GET",
+            url: `/anime_data/${ID}`
+        }).then((result)=> {
+            return result
+        }).catch(function(e) {
+            console.error(e)
+            Scrap.output(m("span.error", "Something Went Wrong"))
+            if (e.code == 404) {
+                Scrap.output(m("span.error", `ERROR: ${e.code} Not Found`))
+            }
+        })
+    },
+
+    onbeforeupdate: async (vnode, oldvnode)=> {
+        if (!vnode.attrs.ID) {
+            Scrap.output(null)
+            Scrap.input = ""
+            Scrap.ep_start = null
+        }
+    },
+
+    oninit: async (vnode)=> {
+        if (vnode.attrs.ID) {
+            let data = await Scrap.fetch_anime_data(vnode.attrs.ID)
+            Scrap.anime_id = vnode.attrs.ID
+            Scrap.input = data.url
+            Scrap.ep_start = data.count
+        }
     }
 }
+
