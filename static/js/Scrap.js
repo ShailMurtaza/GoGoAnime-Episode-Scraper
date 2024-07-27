@@ -4,6 +4,7 @@ const parser = new DOMParser();
 var Scrap = {
     anime_id: null,
     ep_start: null,
+    update: false,
     scraping: true,
     input: "",
     output_data: [],
@@ -43,7 +44,7 @@ var Scrap = {
         try {
             output("") // Clear Output
             const anime_url = Scrap.input.trim() // Get inputbox URL
-            if (!anime_url) throw "Enter Urlhttps://anitaku.pe/cardfight-vanguard-divinez-season-2-episode-ffff"
+            if (!anime_url) throw "Enter Url"
             Scrap.scrap_btn_disabled = true
             Scrap.stop_btn_disabled = false
 
@@ -67,7 +68,10 @@ var Scrap = {
             output(m("b", `Fetched: ${ep_list.length} Episodes`))
             output("Saving data in database ...")
             result = await Scrap.save_anime(alias, ep_list, anime_url)
-            if (result) output(m("b", "Data Saved Successfully ..."))
+            if (result) {
+                output(m("b", "Data Saved Successfully ..."))
+                if (Scrap.update) Scrap.ep_start += ep_list.length
+            }
             else throw `Output: ${result}`
         } catch (error) {
             output(m("span.error", "Something Went Wrong"))
@@ -217,6 +221,7 @@ var Scrap = {
             Scrap.anime_id = vnode.attrs.ID
             Scrap.input = data.url
             Scrap.ep_start = data.count
+            Scrap.update = true
         }
     }
 }
