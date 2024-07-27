@@ -30,7 +30,7 @@ var Scrap = {
                 class: "btn btn-orange",
                 type: "button",
                 disabled: Scrap.stop_btn_disabled,
-                onclick: "scrap_stop()",
+                onclick: Scrap.stop,
             }, "STOP"), 
             m("p#output", Scrap.output_data.map((data)=> {
                 return data
@@ -42,7 +42,9 @@ var Scrap = {
         try {
             output("") // Clear Output
             const anime_url = Scrap.input.trim() // Get inputbox URL
-            if (!anime_url) throw "Enter Url"
+            if (!anime_url) throw "Enter Urlhttps://anitaku.pe/cardfight-vanguard-divinez-season-2-episode-ffff"
+            Scrap.scrap_btn_disabled = true
+            Scrap.stop_btn_disabled = false
 
             output("Fetching ...")
             let result = await Scrap.fetch_data(anime_url) // get HTML data of url using fetch api of server
@@ -67,6 +69,12 @@ var Scrap = {
             output(m("span.error", `ERROR: ${error}`))
             console.error(error)
         }
+
+        // If scraping was stopped intentionally show message
+        if (!Scrap.scraping) Scrap.output(m("b", "Stopped ..."))
+        Scrap.scrap_btn_disabled = false // enable scrap button
+        Scrap.stop_btn_disabled = true // disable scraping stop button
+        Scrap.scraping = true
     },
     // Return full API URL for given anime data. It will content of that URL html will contain <ul> with <li> and <a>. Every episode link will be separated by different <a> tag
     gen_url: (html, ep_start=null)=> {
@@ -136,6 +144,11 @@ var Scrap = {
     HTML: (string)=> {
         let htmlDoc = parser.parseFromString(string, "text/html") // Parse HTML
         return htmlDoc
+    },
+
+    // Stop scrapping in middle
+    stop: ()=> {
+        Scrap.scraping = false
     },
 
     output: (data)=> {
