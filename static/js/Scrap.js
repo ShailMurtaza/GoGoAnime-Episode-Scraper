@@ -46,16 +46,23 @@ var Scrap = {
                 output("Enter Url")
                 return
             }
+
             output("Fetching ...")
             let result = await Scrap.fetch_data(anime_url) // get HTML data of url using fetch api of server
             if (!result) throw "False Output. Check your URL and Try Again"
             output("Fetched ...")
-            result = Scrap.gen_url(result)
+            result = Scrap.gen_url(result) // generate full GoGo Anime URL to fetch links of all episodes
             if (!result) throw "Nothing new to fetch"
             const full_api_url = result[0]
             const alias = result[1]
             output(`ALIAS: ${alias}`)
             output(`URL: ${full_api_url}`)
+
+            result = await Scrap.fetch_data(full_api_url) // get HTML data of url using fetch api of server
+            if (!result) throw "False Output"
+            else if (result == "") throw "API URL response is empty. I guess something wrong with GoGoAnime 🤷‍♂️"
+            let url_list = Scrap.get_url_list(result, anime_url)
+            console.log(url_list)
         } catch (error) {
             output(m("span.error", "Something Went Wrong"))
             output(m("span.error", `ERROR: ${error}`))
@@ -83,6 +90,20 @@ var Scrap = {
         }
         let url = `${api_url}?ep_start=${ep_start}&ep_end=${ep_end}&id=${anime_id}&default_ep=${default_ep}&alias=${alias}`
         return [url, alias]
+    },
+    // data will have <ul> tag with <li> and within <li> there will be <a href="one episode URL">
+    get_url_list: (data, anime_url)=> {
+        let htmlDoc = Scrap.HTML(data) // Parse HTML
+        let a_href = htmlDoc.getElementsByTagName("a")
+        let url_list = [] // array to store all episodes links
+
+        anime_url = new URL(anime_url) // For url parsing
+        let main_url = `${anime_url.protocol}//${anime_url.hostname}` // get url without path
+        for (let i=0;i<a_href.length;i++) {
+            let link = main_url + a_href[i].getAttribute("href").trim() // main url of GoGo anime + episode path taken fron API
+            url_list.push(link)
+        }
+        return url_list
     },
     // Prase string as HTML DOM
     HTML: (string)=> {
