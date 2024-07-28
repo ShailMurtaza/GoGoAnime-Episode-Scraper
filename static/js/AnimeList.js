@@ -70,26 +70,26 @@ var AnimeList = {
 }
 
 var AnimeRow = {
-    view: (vnodes)=> {
+    view: (vnode)=> {
         return m("div", {class: "row"},
             [
-                m(m.route.Link, {class: "btn btn-orange link","href":"/get_anime/${i}"},
-                    m("b", vnodes.attrs.title)
+                m(m.route.Link, {class: "btn btn-orange link","href":`/get_anime/${vnode.attrs.id}`},
+                    m("b", vnode.attrs.title)
                 ),
                 m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {
-                    vnodes.attrs.edit_title(vnodes.attrs.id)
+                    vnode.attrs.edit_title(vnode.attrs.id)
                 }},
                     m("img", {src: "/static/img/pencil.webp"})
                 ),
                 m(m.route.Link, {
-                    href: `/update/${vnodes.attrs.id}`,
+                    href: `/update/${vnode.attrs.id}`,
                     selector: "button",
                     class: "btn btn-sm btn-update",
                 },
                     m("img", {src: "/static/img/update.webp"})
                 ),
                 m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: ()=> {
-                    vnodes.attrs.delete(vnodes.attrs.id)
+                    vnode.attrs.delete(vnode.attrs.id)
                 }},
                     m("img", {src: "/static/img/trash.webp"})
                 )
@@ -99,21 +99,21 @@ var AnimeRow = {
 }
 
 var EditAnime = {
-    oninit: (vnodes)=> {
-        vnodes.state.value = vnodes.attrs.title
+    oninit: (vnode)=> {
+        vnode.state.value = vnode.attrs.title
     },
-    view: (vnodes)=> {
+    view: (vnode)=> {
         return m("div", {class: "row"},
             [
-                m("input", {class: "btn input-title", type: "text", placeholder: "Title", value: vnodes.state.value, oninput: (e)=> {
-                    vnodes.state.value = e.target.value
+                m("input", {class: "btn input-title", type: "text", placeholder: "Title", value: vnode.state.value, oninput: (e)=> {
+                    vnode.state.value = e.target.value
                 }}),
                 m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {
-                    vnodes.attrs.save_title(vnodes.attrs.id, vnodes.state.value)
-                }}, 
+                    vnode.attrs.save_title(vnode.attrs.id, vnode.state.value)
+                }},
                     m("img", {src: "/static/img/floppy.webp"})
                 ),
-                m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: vnodes.attrs.cancel_edit}, 
+                m("button", {class: "btn btn-sm btn-danger", type: "button", onclick: vnode.attrs.cancel_edit},
                     m("img", {src: "/static/img/cancel.webp"})
                 )
             ]

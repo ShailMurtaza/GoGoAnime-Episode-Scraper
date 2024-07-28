@@ -42,6 +42,11 @@ m.route(root, "/", {
         render: (vnode)=> {
             return m(Layout, m(Scrap, {ID: vnode.attrs.ID}))
         }
+    },
+    "/get_anime/:ID": {
+        render: (vnode)=> {
+            return m(Layout, m(EpList, {ID: vnode.attrs.ID}))
+        }
     }
 })
 
