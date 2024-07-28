@@ -2,7 +2,10 @@ var AnimeList = {
     anime_list: {},
     edit_key: null,
     search: "",
-    oninit: ()=> {AnimeList.fetch_anime_list()},
+    oninit: ()=> {
+        Layout.updateTitle("Anime")
+        AnimeList.fetch_anime_list()
+    },
     view: ()=> {
         return [
             m("input", {class: "input", type:"text", placeholder:"Search", autofocus:"autofocus", autocomplete:"off", oninput: (e)=> {
@@ -70,7 +73,7 @@ var AnimeRow = {
     view: (vnodes)=> {
         return m("div", {class: "row"},
             [
-                m("a", {class: "btn btn-orange link","href":"/get_anime/${i}"},
+                m(m.route.Link, {class: "btn btn-orange link","href":"/get_anime/${i}"},
                     m("b", vnodes.attrs.title)
                 ),
                 m("button", {class: "btn btn-sm btn-primary", type: "button", onclick: ()=> {

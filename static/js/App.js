@@ -1,7 +1,13 @@
 const root = document.body
 m.route.prefix = "#"
 
+
 var Layout = {
+    TITLE: "",
+    updateTitle: (title)=> {
+        Layout.TITLE = title
+        m.redraw()
+    },
     view: (vnode)=> {
         return [
             m("nav", [
@@ -13,27 +19,28 @@ var Layout = {
                 )
             ]),
             m("h1", {class:"title"},
-                vnode.attrs.title
+                Layout.TITLE
             ),
             m("main", vnode.children)
         ]
     }
 }
 
+
 m.route(root, "/", {
     "/": {
         render: ()=> {
-            return m(Layout, {title: "Anime List"}, m(AnimeList))
+            return m(Layout, m(AnimeList))
         }
     },
     "/scrap": {
         render: ()=> {
-            return m(Layout, {title: "Scraping"}, m(Scrap, {ID: null}))
+            return m(Layout, m(Scrap, {ID: null}))
         }
     },
     "/update/:ID": {
         render: (vnode)=> {
-            return m(Layout, {title: "Update Anime"}, m(Scrap, {ID: vnode.attrs.ID}))
+            return m(Layout, m(Scrap, {ID: vnode.attrs.ID}))
         }
     }
 })

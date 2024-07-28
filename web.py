@@ -75,7 +75,7 @@ def anime_data(ID):
         return abort(404)
 
     count = database.episodes_count(ID)
-    return jsonify({"url": anime.anime_url, "count": count})
+    return jsonify({"title": anime.title, "url": anime.anime_url, "count": count})
 
 
 # Return number of episodes of anime

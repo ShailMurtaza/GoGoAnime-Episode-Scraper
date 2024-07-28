@@ -209,6 +209,7 @@ var Scrap = {
 
     onbeforeupdate: async (vnode, oldvnode)=> {
         if (!vnode.attrs.ID) {
+            Layout.updateTitle("Scraping")
             Scrap.output(null)
             Scrap.input = ""
             Scrap.ep_start = null
@@ -222,6 +223,10 @@ var Scrap = {
             Scrap.input = data.url
             Scrap.ep_start = data.count
             Scrap.update = true
+            Layout.updateTitle(`Update: ${data.title}`)
+        }
+        else {
+            Layout.updateTitle("Scraping")
         }
     }
 }
