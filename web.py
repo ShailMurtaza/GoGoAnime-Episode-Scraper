@@ -27,45 +27,29 @@ def get_anime_list():
 
 
 # get specific anime with its episode list
-@app.route("/get_anime/<int:ID>")
-def get_anime(ID):
+@app.route("/get_anime_ep/<int:ID>")
+def get_anime_ep(ID):
     anime = database.get_anime(ID)
     if anime:
         ep_list = database.anime_ep_list(ID)
         ep_list = ep_to_dict(ep_list)
-        return render_template("ep_list.html", anime_id=ID, ep_list=ep_list)
-    return redirect("/")
-
-
-# get index of specific anime using primary key
-@app.route("/get_index/<int:ID>")
-def get_anime_index(ID):
-    anime = database.get_anime(ID)
-    if anime:
-        return str(anime.index)
-    return "False"
+        return jsonify({"episodes": ep_list, "index": anime.index})
+    return abort(404)
 
 
 # update/set index of anime
 @app.route("/set_index/<int:ID>/<int:index>")
 def set_anime_index(ID, index):
     anime = database.get_anime(ID)
+    result = False
     if anime:
         ep_num = database.episodes_count(ID)
         # Number of episodes should be greater than index being set because index starts with 0
         if ep_num >= 0 and ep_num > index:
             anime.index = index
             database.update_anime(anime)
-            return "True"
-    return "False"
-
-
-# @app.route("/update_anime/<int:ID>")
-# def update_anime(ID):
-#     anime = database.get_anime(ID)
-#     if not anime:
-#         return redirect("/")
-#     return render_template("scrap.html", anime_id=anime.id, anime_url=anime.anime_url, update=True)
+            result = True
+    return jsonify({"result": result})
 
 
 @app.route("/anime_data/<int:ID>")
@@ -76,16 +60,6 @@ def anime_data(ID):
 
     count = database.episodes_count(ID)
     return jsonify({"title": anime.title, "url": anime.anime_url, "count": count})
-
-
-# Return number of episodes of anime
-# @app.route("/anime_count/<int:ID>")
-# def anime_count(ID):
-#     anime = database.get_anime(ID)
-#     if not anime:
-#         return "False"
-#     count = database.episodes_count(ID)
-#     return str(count)
 
 
 # save new anime, or update list of episode if anime already exist
