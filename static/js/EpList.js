@@ -1,11 +1,13 @@
 var EpList = {
     anime_id: null,
+    current_ep: null,
     ep_link: "",
     ep_list: [],
     oninit: async (vnode)=> {
         Layout.updateTitle("Anime Episodes")
         EpList.anime_id = vnode.attrs.ID
         const data = await EpList.fetch_data()
+        EpList.current_ep = data.index
         EpList.ep_list = data.episodes
         EpList.set_episode(data.index)
     },
@@ -17,13 +19,13 @@ var EpList = {
             ),
             m("div", {id: "anime_nav"},
                 [
-                    m("button", {class: "btn-nav", onclick: "prev_ep()"},
+                    m("button", {class: "btn-nav", onclick: EpList.prev_ep},
                         "PREVIOUS"
                     ),
                     m(m.route.Link, {class: "btn-nav", href: `/update/${EpList.anime_id}`},
                         "UPDATE"
                     ),
-                    m("button", {class: "btn-nav", onclick: "next_ep()"},
+                    m("button", {class: "btn-nav", onclick: EpList.next_ep},
                         "NEXT"
                     )
                 ]
@@ -43,7 +45,6 @@ var EpList = {
         if (ep >= EpList.ep_list.length || ep < 0) {
             ep = 0
         }
-        // fetch(`/set_index/${anime_id}/${ep}`).then(r=>{return r.text()}).then(text=>console.log("setEP Result:" , text))
         m.request({
             method: "GET",
             url: `/set_index/${EpList.anime_id}/${ep}`
@@ -51,9 +52,22 @@ var EpList = {
             console.log(`set_episode Result: ${result.result}, ${ep}`)
         })
 
-        let current_ep = EpList.ep_list[ep]
-        Layout.updateTitle(current_ep[0])
-        EpList.ep_link = current_ep[1]
+        let ep_data = EpList.ep_list[ep]
+        Layout.updateTitle(ep_data[0])
+        EpList.ep_link = ep_data[1]
+        EpList.current_ep = ep
+    },
+
+    next_ep: ()=> {
+        let ep = EpList.current_ep + 1
+        if (ep < EpList.ep_list.length)
+            EpList.set_episode(ep)
+    },
+
+    prev_ep: ()=> {
+        let ep = EpList.current_ep - 1
+        if (ep > -1)
+            EpList.set_episode(ep)
     },
 
     fetch_data: ()=> {
