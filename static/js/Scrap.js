@@ -102,7 +102,8 @@ var Scrap = {
         let default_ep = htmlDoc.getElementById("default_ep").value
         let alias = htmlDoc.getElementById("alias_anime").value
 
-        if (ep_start > ep_end) {
+        // Sometimes ep_end could be empty. API will automatically return full number of episodes.
+        if (ep_end != '' && ep_start > ep_end) {
             return false
         }
         let url = `${api_url}?ep_start=${ep_start}&ep_end=${ep_end}&id=${anime_id}&default_ep=${default_ep}&alias=${alias}`
@@ -207,13 +208,11 @@ var Scrap = {
         })
     },
 
-    onbeforeupdate: async (vnode, oldvnode)=> {
-        if (!vnode.attrs.ID) {
-            Layout.updateTitle("Scraping")
-            Scrap.output(null)
-            Scrap.input = ""
-            Scrap.ep_start = null
-        }
+    onbeforeremove: async (vnode)=> {
+        Layout.updateTitle("Scraping")
+        Scrap.output(null)
+        Scrap.input = ""
+        Scrap.ep_start = null
     },
 
     oninit: async (vnode)=> {
